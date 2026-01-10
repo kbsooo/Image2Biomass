@@ -70,7 +70,7 @@ class CFG:
     input_size = 384  # EfficientNet-B0 default
 
     # === Training ===
-    epochs = 5  # 빠른 학습
+    epochs = 10  # pretrained 없이는 더 많은 epoch 필요
     batch_size = 8
     lr = 1e-3
     weight_decay = 1e-4
@@ -211,13 +211,13 @@ class BiomassDataset(Dataset):
 class SimpleBaseline(nn.Module):
     """
     EfficientNet-B0 + Simple regression head.
-    torchvision 기본 제공 모델 사용 (인터넷 OFF에서도 작동).
+    Internet OFF 환경에서는 pretrained=False 사용.
     """
-    def __init__(self, num_targets=5, pretrained=True):
+    def __init__(self, num_targets=5, pretrained=False):
         super().__init__()
 
-        # EfficientNet-B0 backbone
-        weights = models.EfficientNet_B0_Weights.DEFAULT if pretrained else None
+        # EfficientNet-B0 backbone (pretrained=False for offline mode)
+        weights = None  # Internet OFF에서는 weights 다운로드 불가
         self.backbone = models.efficientnet_b0(weights=weights)
 
         # Get feature dimension
