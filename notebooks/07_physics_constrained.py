@@ -632,20 +632,23 @@ def inference(
     all_preds = []
     
     for batch in tqdm(loader, desc='Inference'):
-        if use_tabular:
+        # 동적으로 batch unpacking (tabular 유무에 따라 2개 또는 3개)
+        if len(batch) == 3:
             imgs, tabular, _ = batch
             imgs = imgs.to(device)
             tabular = tabular.to(device)
+            has_tabular = True
         else:
             imgs, _ = batch
             imgs = imgs.to(device)
             tabular = None
+            has_tabular = False
         
         # Ensemble prediction
         batch_preds = []
         for model in models:
             model.eval()
-            if use_tabular:
+            if has_tabular and use_tabular:
                 _, full_pred = model(imgs, tabular)
             else:
                 _, full_pred = model(imgs)
