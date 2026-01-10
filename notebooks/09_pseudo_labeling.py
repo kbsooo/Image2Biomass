@@ -378,6 +378,12 @@ def competition_metric(y_true, y_pred):
 class BiomassDatasetWithTabular(Dataset):
     """Image + Tabular → Biomass"""
     def __init__(self, df, cfg, transforms=None, mode='train', tabular_scaler=None):
+        # Add dummy targets for test BEFORE reset
+        df = df.copy()
+        for t in TARGET_ORDER:
+            if t not in df.columns:
+                df[t] = 0.0
+        
         self.df = df.reset_index(drop=True)
         self.cfg = cfg
         self.transforms = transforms
@@ -397,11 +403,6 @@ class BiomassDatasetWithTabular(Dataset):
         else:
             self.tabular = None
             self.has_tabular = False
-        
-        # Add dummy targets for test
-        for t in TARGET_ORDER:
-            if t not in df.columns:
-                df[t] = 0.0
 
     def __len__(self):
         return len(self.df)
