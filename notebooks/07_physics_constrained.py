@@ -84,7 +84,8 @@ class CFG:
     weight_decay = 1e-4
     
     # === Multi-Modal ===
-    use_tabular = True  # Tabular features 사용 여부
+    # ⚠️ Test set에 tabular features가 없으므로 이미지만 사용!
+    use_tabular = False
     tabular_cols = ['Pre_GSHH_NDVI', 'Height_Ave_cm']
     
     # === Misc ===
