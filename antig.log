@@ -1,251 +1,77 @@
-7.7s 1 0.00s - Debugger warning: It seems that frozen modules are being used, which may
-7.7s 2 0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off
-7.7s 3 0.00s - to python to disable frozen modules.
-7.7s 4 0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.
-8.3s 5 0.00s - Debugger warning: It seems that frozen modules are being used, which may
-8.3s 6 0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off
-8.3s 7 0.00s - to python to disable frozen modules.
-8.3s 8 0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.
-23.6s 9 /usr/local/lib/python3.12/dist-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The 'repr' attribute with value False was provided to the `Field()` function, which has no effect in the context it was used. 'repr' is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
-23.6s 10 warnings.warn(
-23.6s 11 /usr/local/lib/python3.12/dist-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The 'frozen' attribute with value True was provided to the `Field()` function, which has no effect in the context it was used. 'frozen' is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
-23.6s 12 warnings.warn(
-23.6s 13 
-23.6s 14 /usr/local/lib/python3.12/dist-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The 'repr' attribute with value False was provided to the `Field()` function, which has no effect in the context it was used. 'repr' is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
-23.6s 15 warnings.warn(
-23.6s 16 /usr/local/lib/python3.12/dist-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The 'frozen' attribute with value True was provided to the `Field()` function, which has no effect in the context it was used. 'frozen' is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
-23.6s 17 warnings.warn(
-58.5s 18 PyTorch version: 2.8.0+cu126
-58.5s 19 CUDA available: True
-58.5s 20 GPU count: 2
-58.5s 21 GPU 0: Tesla T4
-58.5s 22 GPU 1: Tesla T4
-58.5s 23 /usr/local/lib/python3.12/dist-packages/albumentations/check_version.py:147: UserWarning: Error fetching version info <urlopen error [Errno -3] Temporary failure in name resolution>
-58.5s 24 data = fetch_version_info()
-58.5s 25 
-58.5s 26 /usr/local/lib/python3.12/dist-packages/albumentations/check_version.py:147: UserWarning: Error fetching version info <urlopen error [Errno -3] Temporary failure in name resolution>
-58.5s 27 data = fetch_version_info()
-58.5s 28 Device: cuda
-58.5s 29 Use tabular: True
-58.7s 30 Train data shape: (357, 13)
-58.7s 31 Columns: ['image_path', 'Sampling_Date', 'State', 'Species', 'Pre_GSHH_NDVI', 'Height_Ave_cm', 'Dry_Clover_g', 'Dry_Dead_g', 'Dry_Green_g', 'Dry_Total_g', 'GDM_g', 'image_id', 'fold']
-58.7s 32 Pre_GSHH_NDVI: min=0.16, max=0.91
-58.7s 33 Height_Ave_cm: min=1.00, max=70.00
-58.9s 34 
-58.9s 35 ============================================================
-58.9s 36 🚀 Training Fold 0
-58.9s 37 ============================================================
-58.9s 38 Train: 285, Val: 72
-58.9s 39 Using tabular features: True
-60.5s 40 ✓ Loaded pretrained weights from /kaggle/input/pretrained-weights-biomass/efficientnet_b4/efficientnet_b4.pth
-60.5s 41 🚀 Using 2 GPUs with DataParallel
-96.1s 42 Epoch 1/15 | LR: 0.000198 | Train Loss: 613.9972 | Val MSE: 992.4755 | CV: -1.3681
-96.1s 43 ✓ New best! Saved.
-121.9s 44 Epoch 2/15 | LR: 0.000191 | Train Loss: 480.8689 | Val MSE: 426.5152 | CV: 0.0949
-121.9s 45 ✓ New best! Saved.
-147.2s 46 Epoch 3/15 | LR: 0.000181 | Train Loss: 261.5171 | Val MSE: 245.5295 | CV: 0.5417
-147.2s 47 ✓ New best! Saved.
-172.3s 48 Epoch 4/15 | LR: 0.000167 | Train Loss: 221.9934 | Val MSE: 243.9345 | CV: 0.5282
-197.7s 49 Epoch 5/15 | LR: 0.000150 | Train Loss: 198.9413 | Val MSE: 223.1860 | CV: 0.5619
-197.7s 50 ✓ New best! Saved.
-222.8s 51 Epoch 6/15 | LR: 0.000131 | Train Loss: 189.5672 | Val MSE: 227.2139 | CV: 0.5367
-248.3s 52 Epoch 7/15 | LR: 0.000110 | Train Loss: 173.7204 | Val MSE: 223.3236 | CV: 0.5513
-273.7s 53 Epoch 8/15 | LR: 0.000090 | Train Loss: 176.1659 | Val MSE: 211.7590 | CV: 0.5807
-273.7s 54 ✓ New best! Saved.
-299.9s 55 Epoch 9/15 | LR: 0.000069 | Train Loss: 167.3585 | Val MSE: 209.2216 | CV: 0.5893
-299.9s 56 ✓ New best! Saved.
-325.7s 57 Epoch 10/15 | LR: 0.000050 | Train Loss: 175.2260 | Val MSE: 217.7324 | CV: 0.5554
-353.0s 58 Epoch 11/15 | LR: 0.000033 | Train Loss: 166.2484 | Val MSE: 206.3233 | CV: 0.5934
-353.0s 59 ✓ New best! Saved.
-379.0s 60 Epoch 12/15 | LR: 0.000019 | Train Loss: 174.6137 | Val MSE: 211.9679 | CV: 0.5754
-404.5s 61 Epoch 13/15 | LR: 0.000009 | Train Loss: 167.3460 | Val MSE: 213.0790 | CV: 0.5700
-430.5s 62 Epoch 14/15 | LR: 0.000002 | Train Loss: 162.6955 | Val MSE: 203.3328 | CV: 0.5971
-430.5s 63 ✓ New best! Saved.
-456.9s 64 Epoch 15/15 | LR: 0.000000 | Train Loss: 157.0296 | Val MSE: 202.1539 | CV: 0.5994
-456.9s 65 ✓ New best! Saved.
-457.4s 66 Fold 0 Best CV: 0.5994
-457.4s 67 
-457.4s 68 ============================================================
-457.4s 69 🚀 Training Fold 1
-457.4s 70 ============================================================
-457.4s 71 Train: 285, Val: 72
-457.4s 72 Using tabular features: True
-457.6s 73 ✓ Loaded pretrained weights from /kaggle/input/pretrained-weights-biomass/efficientnet_b4/efficientnet_b4.pth
-457.6s 74 🚀 Using 2 GPUs with DataParallel
-483.1s 75 Epoch 1/15 | LR: 0.000198 | Train Loss: 552.4116 | Val MSE: 1317.1246 | CV: -1.1228
-483.1s 76 ✓ New best! Saved.
-508.9s 77 Epoch 2/15 | LR: 0.000191 | Train Loss: 437.6667 | Val MSE: 639.7480 | CV: 0.0759
-508.9s 78 ✓ New best! Saved.
-534.4s 79 Epoch 3/15 | LR: 0.000181 | Train Loss: 242.1520 | Val MSE: 346.5171 | CV: 0.5794
-534.4s 80 ✓ New best! Saved.
-560.1s 81 Epoch 4/15 | LR: 0.000167 | Train Loss: 200.8528 | Val MSE: 269.0256 | CV: 0.6773
-560.1s 82 ✓ New best! Saved.
-585.7s 83 Epoch 5/15 | LR: 0.000150 | Train Loss: 193.8033 | Val MSE: 285.2504 | CV: 0.6408
-611.3s 84 Epoch 6/15 | LR: 0.000131 | Train Loss: 181.3798 | Val MSE: 277.0376 | CV: 0.6441
-636.9s 85 Epoch 7/15 | LR: 0.000110 | Train Loss: 172.4810 | Val MSE: 255.9673 | CV: 0.6681
-662.6s 86 Epoch 8/15 | LR: 0.000090 | Train Loss: 159.5417 | Val MSE: 276.6954 | CV: 0.6276
-688.0s 87 Epoch 9/15 | LR: 0.000069 | Train Loss: 157.8968 | Val MSE: 268.8726 | CV: 0.6382
-713.6s 88 Epoch 10/15 | LR: 0.000050 | Train Loss: 155.9599 | Val MSE: 246.8111 | CV: 0.6618
-738.8s 89 Epoch 11/15 | LR: 0.000033 | Train Loss: 157.5976 | Val MSE: 251.0986 | CV: 0.6556
-764.3s 90 Epoch 12/15 | LR: 0.000019 | Train Loss: 160.4606 | Val MSE: 244.6404 | CV: 0.6668
-789.3s 91 Epoch 13/15 | LR: 0.000009 | Train Loss: 149.5062 | Val MSE: 246.2902 | CV: 0.6646
-814.9s 92 Epoch 14/15 | LR: 0.000002 | Train Loss: 154.9376 | Val MSE: 245.2487 | CV: 0.6658
-840.5s 93 Epoch 15/15 | LR: 0.000000 | Train Loss: 154.2474 | Val MSE: 243.5167 | CV: 0.6659
-840.8s 94 Fold 1 Best CV: 0.6773
-840.8s 95 
-840.8s 96 ============================================================
-840.8s 97 🚀 Training Fold 2
-840.8s 98 ============================================================
-840.8s 99 Train: 286, Val: 71
-840.8s 100 Using tabular features: True
-841.0s 101 ✓ Loaded pretrained weights from /kaggle/input/pretrained-weights-biomass/efficientnet_b4/efficientnet_b4.pth
-841.0s 102 🚀 Using 2 GPUs with DataParallel
-866.4s 103 Epoch 1/15 | LR: 0.000198 | Train Loss: 572.4699 | Val MSE: 1267.4725 | CV: -1.0915
-866.4s 104 ✓ New best! Saved.
-892.3s 105 Epoch 2/15 | LR: 0.000191 | Train Loss: 440.8628 | Val MSE: 536.0408 | CV: 0.1996
-892.3s 106 ✓ New best! Saved.
-917.9s 107 Epoch 3/15 | LR: 0.000181 | Train Loss: 275.4932 | Val MSE: 325.1331 | CV: 0.5320
-917.9s 108 ✓ New best! Saved.
-944.1s 109 Epoch 4/15 | LR: 0.000167 | Train Loss: 231.3622 | Val MSE: 235.8220 | CV: 0.6706
-944.1s 110 ✓ New best! Saved.
-969.5s 111 Epoch 5/15 | LR: 0.000150 | Train Loss: 215.1203 | Val MSE: 240.2071 | CV: 0.6490
-994.9s 112 Epoch 6/15 | LR: 0.000131 | Train Loss: 204.6304 | Val MSE: 219.4857 | CV: 0.6867
-994.9s 113 ✓ New best! Saved.
-1020.4s 114 Epoch 7/15 | LR: 0.000110 | Train Loss: 190.6861 | Val MSE: 215.7917 | CV: 0.6824
-1046.0s 115 Epoch 8/15 | LR: 0.000090 | Train Loss: 183.3166 | Val MSE: 210.3136 | CV: 0.6874
-1046.0s 116 ✓ New best! Saved.
-1071.1s 117 Epoch 9/15 | LR: 0.000069 | Train Loss: 185.4524 | Val MSE: 217.7660 | CV: 0.6735
-1096.8s 118 Epoch 10/15 | LR: 0.000050 | Train Loss: 173.4276 | Val MSE: 199.4672 | CV: 0.7064
-1096.8s 119 ✓ New best! Saved.
-1121.8s 120 Epoch 11/15 | LR: 0.000033 | Train Loss: 175.0808 | Val MSE: 192.7066 | CV: 0.7160
-1121.8s 121 ✓ New best! Saved.
-1147.2s 122 Epoch 12/15 | LR: 0.000019 | Train Loss: 170.0212 | Val MSE: 195.9601 | CV: 0.7091
-1172.3s 123 Epoch 13/15 | LR: 0.000009 | Train Loss: 166.4950 | Val MSE: 192.9281 | CV: 0.7147
-1197.8s 124 Epoch 14/15 | LR: 0.000002 | Train Loss: 170.0903 | Val MSE: 201.6058 | CV: 0.6978
-1224.4s 125 Epoch 15/15 | LR: 0.000000 | Train Loss: 175.0854 | Val MSE: 197.9419 | CV: 0.7040
-1224.7s 126 Fold 2 Best CV: 0.7160
-1224.7s 127 
-1224.7s 128 ============================================================
-1224.7s 129 🚀 Training Fold 3
-1224.7s 130 ============================================================
-1224.7s 131 Train: 286, Val: 71
-1224.7s 132 Using tabular features: True
-1224.9s 133 ✓ Loaded pretrained weights from /kaggle/input/pretrained-weights-biomass/efficientnet_b4/efficientnet_b4.pth
-1224.9s 134 🚀 Using 2 GPUs with DataParallel
-1250.4s 135 Epoch 1/15 | LR: 0.000198 | Train Loss: 594.4932 | Val MSE: 1067.4866 | CV: -1.1750
-1250.4s 136 ✓ New best! Saved.
-1276.3s 137 Epoch 2/15 | LR: 0.000191 | Train Loss: 393.0066 | Val MSE: 361.7038 | CV: 0.3453
-1276.3s 138 ✓ New best! Saved.
-1302.0s 139 Epoch 3/15 | LR: 0.000181 | Train Loss: 284.2826 | Val MSE: 310.0367 | CV: 0.4455
-1302.0s 140 ✓ New best! Saved.
-1327.9s 141 Epoch 4/15 | LR: 0.000167 | Train Loss: 219.1422 | Val MSE: 237.1458 | CV: 0.5899
-1327.9s 142 ✓ New best! Saved.
-1353.2s 143 Epoch 5/15 | LR: 0.000150 | Train Loss: 216.5817 | Val MSE: 251.2918 | CV: 0.5478
-1378.7s 144 Epoch 6/15 | LR: 0.000131 | Train Loss: 195.7262 | Val MSE: 232.3826 | CV: 0.5852
-1404.6s 145 Epoch 7/15 | LR: 0.000110 | Train Loss: 178.5581 | Val MSE: 243.1721 | CV: 0.5570
-1430.0s 146 Epoch 8/15 | LR: 0.000090 | Train Loss: 181.3590 | Val MSE: 250.3404 | CV: 0.5386
-1455.8s 147 Epoch 9/15 | LR: 0.000069 | Train Loss: 183.3161 | Val MSE: 230.3382 | CV: 0.5837
-1481.7s 148 Epoch 10/15 | LR: 0.000050 | Train Loss: 167.4656 | Val MSE: 225.1510 | CV: 0.5925
-1481.7s 149 ✓ New best! Saved.
-1507.5s 150 Epoch 11/15 | LR: 0.000033 | Train Loss: 167.1879 | Val MSE: 213.9755 | CV: 0.6154
-1507.5s 151 ✓ New best! Saved.
-1533.2s 152 Epoch 12/15 | LR: 0.000019 | Train Loss: 157.5902 | Val MSE: 236.0051 | CV: 0.5667
-1558.5s 153 Epoch 13/15 | LR: 0.000009 | Train Loss: 159.6702 | Val MSE: 217.2248 | CV: 0.6075
-1584.3s 154 Epoch 14/15 | LR: 0.000002 | Train Loss: 162.9006 | Val MSE: 221.6265 | CV: 0.5985
-1610.2s 155 Epoch 15/15 | LR: 0.000000 | Train Loss: 165.4411 | Val MSE: 216.0014 | CV: 0.6100
-1610.5s 156 Fold 3 Best CV: 0.6154
-1610.5s 157 
-1610.5s 158 ============================================================
-1610.5s 159 🚀 Training Fold 4
-1610.5s 160 ============================================================
-1610.5s 161 Train: 286, Val: 71
-1610.5s 162 Using tabular features: True
-1610.8s 163 ✓ Loaded pretrained weights from /kaggle/input/pretrained-weights-biomass/efficientnet_b4/efficientnet_b4.pth
-1610.8s 164 🚀 Using 2 GPUs with DataParallel
-1636.3s 165 Epoch 1/15 | LR: 0.000198 | Train Loss: 586.3603 | Val MSE: 1109.4276 | CV: -1.1108
-1636.3s 166 ✓ New best! Saved.
-1662.1s 167 Epoch 2/15 | LR: 0.000191 | Train Loss: 414.8586 | Val MSE: 412.5408 | CV: 0.3385
-1662.1s 168 ✓ New best! Saved.
-1687.8s 169 Epoch 3/15 | LR: 0.000181 | Train Loss: 253.0971 | Val MSE: 341.2990 | CV: 0.4349
-1687.8s 170 ✓ New best! Saved.
-1713.8s 171 Epoch 4/15 | LR: 0.000167 | Train Loss: 216.6956 | Val MSE: 264.4333 | CV: 0.5712
-1713.8s 172 ✓ New best! Saved.
-1739.4s 173 Epoch 5/15 | LR: 0.000150 | Train Loss: 192.6608 | Val MSE: 283.6039 | CV: 0.5205
-1764.9s 174 Epoch 6/15 | LR: 0.000131 | Train Loss: 196.2097 | Val MSE: 253.7705 | CV: 0.5707
-1790.6s 175 Epoch 7/15 | LR: 0.000110 | Train Loss: 180.0772 | Val MSE: 252.9785 | CV: 0.5628
-1816.0s 176 Epoch 8/15 | LR: 0.000090 | Train Loss: 170.4711 | Val MSE: 262.2890 | CV: 0.5403
-1841.8s 177 Epoch 9/15 | LR: 0.000069 | Train Loss: 172.8060 | Val MSE: 228.7930 | CV: 0.6096
-1841.8s 178 ✓ New best! Saved.
-1867.5s 179 Epoch 10/15 | LR: 0.000050 | Train Loss: 161.5491 | Val MSE: 241.0998 | CV: 0.5802
-1893.0s 180 Epoch 11/15 | LR: 0.000033 | Train Loss: 160.4605 | Val MSE: 247.8991 | CV: 0.5638
-1918.8s 181 Epoch 12/15 | LR: 0.000019 | Train Loss: 169.4209 | Val MSE: 225.0674 | CV: 0.6195
-1918.8s 182 ✓ New best! Saved.
-1944.2s 183 Epoch 13/15 | LR: 0.000009 | Train Loss: 157.0887 | Val MSE: 237.4254 | CV: 0.5905
-1969.7s 184 Epoch 14/15 | LR: 0.000002 | Train Loss: 152.6954 | Val MSE: 232.2683 | CV: 0.5986
-1995.7s 185 Epoch 15/15 | LR: 0.000000 | Train Loss: 158.1714 | Val MSE: 236.6294 | CV: 0.5926
-1995.8s 186 Fold 4 Best CV: 0.6195
-1995.8s 187 
-1995.8s 188 ============================================================
-1995.8s 189 📊 Overall CV: 0.6455 ± 0.0440
-1995.8s 190 ============================================================
-1995.9s 191 Test data: 1 images
-1995.9s 192 Test columns: ['image_path', 'Dry_Green_g', 'Dry_Dead_g', 'Dry_Clover_g', 'GDM_g', 'Dry_Total_g']
-1996.6s 193 ✓ Loaded fold 0 (CV: 0.5994)
-1997.0s 194 ✓ Loaded fold 1 (CV: 0.6773)
-1997.4s 195 ✓ Loaded fold 2 (CV: 0.7160)
-1997.9s 196 ✓ Loaded fold 3 (CV: 0.6154)
-1998.1s 197 ✓ Loaded fold 4 (CV: 0.6195)
-1998.1s 198 
-1998.1s 199 Loaded 5 models
-1998.4s 200 Predictions shape: (1, 5)
-1998.5s 201 
-1998.5s 202 ✓ Physics constraint check:
-1998.5s 203 GDM = Green + Clover: True
-1998.5s 204 Total = GDM + Dead: True
-1998.5s 205 
-1998.5s 206 📄 Submission saved: 5 rows
-1998.5s 207 sample_id     target
-1998.5s 208 0   ID1001187975__Dry_Green_g  22.636433
-1998.5s 209 1    ID1001187975__Dry_Dead_g  10.902609
-1998.5s 210 2  ID1001187975__Dry_Clover_g   2.421205
-1998.5s 211 3         ID1001187975__GDM_g  25.057638
-1998.5s 212 4   ID1001187975__Dry_Total_g  35.960247
-1998.6s 213 
-1998.6s 214 === Submission Verification ===
-1998.6s 215 Shape: (5, 2)
-1998.6s 216 Columns: ['sample_id', 'target']
-1998.6s 217 Null values: 0
-1998.6s 218 Target range: [2.42, 35.96]
-1998.6s 219 
-1998.6s 220 ============================================================
-1998.6s 221 🏆 Physics-Constrained Baseline Complete!
-1998.6s 222 ============================================================
-1998.6s 223 
-1998.6s 224 Output: /kaggle/working/submission.csv
-1998.6s 225 CV Score: 0.6455 ± 0.0440
-1998.6s 226 
-1998.6s 227 Key Features:
-1998.6s 228 1. ✅ Physics-Constrained Head (3 independent, 2 derived)
-1998.6s 229 2. ✅ 5-Fold Cross-Validation
-1998.6s 230 3. ✅ Pretrained efficientnet_b4 backbone
-1998.6s 231 4. ✅ Multi-Modal (Image + Tabular): True
-1998.6s 232 5. ✅ Domain-specific augmentations
-1998.6s 233 
-1998.6s 234 Next steps:
-1998.6s 235 - Try DINOv2 backbone for potentially higher performance
-1998.6s 236 - Add TTA (Test-Time Augmentation)
-1998.6s 237 - Experiment with different loss functions
-1998.6s 238 ============================================================
-1998.6s 239 
-2004.3s 240 /usr/local/lib/python3.12/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\|'
-2004.3s 241 cells[i][c] = re.sub('\\\\\|', '|', cell)
-2004.5s 242 /usr/local/lib/python3.12/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\_'
-2004.5s 243 text = re.sub(r'_', '\_', text) # Escape underscores in display text
-2005.2s 244 /usr/local/lib/python3.12/dist-packages/traitlets/traitlets.py:2915: FutureWarning: --Exporter.preprocessors=["remove_papermill_header.RemovePapermillHeader"] for containers is deprecated in traitlets 5.0. You can pass `--Exporter.preprocessors item` ... multiple times to add items to a list.
-2005.2s 245 warn(
-2005.2s 246 [NbConvertApp] Converting notebook __notebook__.ipynb to notebook
-2006.0s 247 [NbConvertApp] Writing 1819178 bytes to __notebook__.ipynb
-2008.5s 248 /usr/local/lib/python3.12/dist-packages/traitlets/traitlets.py:2915: FutureWarning: --Exporter.preprocessors=["nbconvert.preprocessors.ExtractOutputPreprocessor"] for containers is deprecated in traitlets 5.0. You can pass `--Exporter.preprocessors item` ... multiple times to add items to a list.
-2008.5s 249 warn(
-2008.5s 250 [NbConvertApp] Converting notebook __notebook__.ipynb to html
-2009.7s 251 [NbConvertApp] Writing 1822570 bytes to __results__.html
+============================================================
+🔬 Exp A: Auxiliary Task - Fold 0
+============================================================
+Train: 285, Val: 72
+✓ Loaded pretrained weights from /kaggle/input/pretrained-weights-biomass/efficientnet_b4/efficientnet_b4.pth
+🚀 Using 2 GPUs with DataParallel
+Epoch 1/10 | LR: 0.000195 | Main: 616.82 | Aux: 0.9751 | Val MSE: 1013.45 | CV: -1.4214
+  ✓ New best!
+Epoch 2/10 | LR: 0.000181 | Main: 454.20 | Aux: 0.8533 | Val MSE: 419.47 | CV: 0.1134
+  ✓ New best!
+Epoch 3/10 | LR: 0.000159 | Main: 307.79 | Aux: 0.8076 | Val MSE: 318.00 | CV: 0.3768
+  ✓ New best!
+Epoch 4/10 | LR: 0.000131 | Main: 265.56 | Aux: 0.7407 | Val MSE: 300.17 | CV: 0.4166
+  ✓ New best!
+Epoch 5/10 | LR: 0.000100 | Main: 238.08 | Aux: 0.8358 | Val MSE: 278.62 | CV: 0.4621
+  ✓ New best!
+Epoch 6/10 | LR: 0.000069 | Main: 218.60 | Aux: 0.7476 | Val MSE: 278.78 | CV: 0.4550
+Epoch 7/10 | LR: 0.000041 | Main: 222.76 | Aux: 0.6546 | Val MSE: 273.83 | CV: 0.4740
+  ✓ New best!
+Epoch 8/10 | LR: 0.000019 | Main: 225.14 | Aux: 0.6649 | Val MSE: 281.82 | CV: 0.4366
+Epoch 9/10 | LR: 0.000005 | Main: 217.41 | Aux: 0.6617 | Val MSE: 286.10 | CV: 0.4238
+Epoch 10/10 | LR: 0.000000 | Main: 230.48 | Aux: 0.6558 | Val MSE: 270.41 | CV: 0.4739
+Fold 0 Best CV: 0.4740
+
+============================================================
+📊 Exp A Results: CV = 0.4740
+============================================================
+
+
+----
+
+============================================================
+📊 Phase 1: Training Tabular Predictor (Image → NDVI/Height)
+============================================================
+✓ Loaded pretrained weights
+Epoch 1/10 | Train: 0.9864 | Val: 1.0450
+  ✓ Saved!
+Epoch 2/10 | Train: 0.8675 | Val: 0.8281
+  ✓ Saved!
+Epoch 3/10 | Train: 0.6457 | Val: 0.5246
+  ✓ Saved!
+Epoch 4/10 | Train: 0.4496 | Val: 0.5134
+  ✓ Saved!
+Epoch 5/10 | Train: 0.3995 | Val: 0.3055
+  ✓ Saved!
+Epoch 6/10 | Train: 0.2775 | Val: 0.2849
+  ✓ Saved!
+Epoch 7/10 | Train: 0.2956 | Val: 0.3996
+Epoch 8/10 | Train: 0.2657 | Val: 0.2692
+  ✓ Saved!
+Epoch 9/10 | Train: 0.2725 | Val: 0.3062
+Epoch 10/10 | Train: 0.2143 | Val: 0.4629
+
+============================================================
+🌿 Phase 2: Training Biomass Model with Tabular
+============================================================
+Epoch 1/10 | Train: 609.23 | CV: -1.2741
+  ✓ Saved!
+Epoch 2/10 | Train: 492.62 | CV: 0.1437
+  ✓ Saved!
+Epoch 3/10 | Train: 279.54 | CV: 0.5689
+  ✓ Saved!
+Epoch 4/10 | Train: 210.02 | CV: 0.5464
+Epoch 5/10 | Train: 200.08 | CV: 0.5547
+Epoch 6/10 | Train: 200.23 | CV: 0.5812
+  ✓ Saved!
+Epoch 7/10 | Train: 183.46 | CV: 0.5832
+  ✓ Saved!
+Epoch 8/10 | Train: 190.05 | CV: 0.5842
+  ✓ Saved!
+Epoch 9/10 | Train: 176.74 | CV: 0.5979
+  ✓ Saved!
+Epoch 10/10 | Train: 185.66 | CV: 0.5863
+
+============================================================
+
+CV Score: 0.5979 (1-fold quick test)
