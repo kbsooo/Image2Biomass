@@ -70,7 +70,7 @@ class CFG:
     WEIGHTS_PATH = Path("/kaggle/input/pretrained-weights-biomass/dinov3_large/dinov3_large")
     
     # === Model ===
-    model_name = "vit_large_patch16_dinov3_qkvb"
+    model_name = "vit_large_patch16_dinov3_qkvb.lvd1689m"  # 전체 모델명 (timm HF 태그 포함)
     backbone_dim = 1024  # ViT-Large output dimension
     img_size = (512, 512)
     
@@ -80,9 +80,9 @@ class CFG:
     batch_size = 16  # T4 x 2 = 32GB VRAM, batch 16 가능
     lr = 1e-4
     use_multi_gpu = True  # DataParallel 사용
-    backbone_lr_mult = 0.1  # backbone은 낮은 lr
+    backbone_lr_mult = 0.1  # backbone 보호 (pretrained feature 유지)
     weight_decay = 1e-4
-    dropout = 0.1
+    dropout = 0.0  # 070.py와 동일 (DINOv3 backbone은 이미 정규화됨)
     
     # === Other ===
     seed = 42
@@ -308,7 +308,7 @@ class CSIROModel(nn.Module):
         
         # Concatenate modulated features
         combined = torch.cat([left_mod, right_mod], dim=1)  # (B, 2048)
-        combined = self.dropout(combined)
+        # 070.py: combined에 dropout 적용하지 않음
         
         # Predict independent targets
         green = self.softplus(self.head_green(combined))

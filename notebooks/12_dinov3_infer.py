@@ -10,9 +10,16 @@
 # 3. `csiro-dinov3-trained` (학습된 fold 가중치) ← 학습 후 생성 필요
 
 #%%
+# Suppress all warnings BEFORE importing libraries
+import warnings
+warnings.filterwarnings('ignore')
+
 import os
+os.environ['PYTHONWARNINGS'] = 'ignore'
+
 import gc
 import random
+import logging
 import numpy as np
 import pandas as pd
 from pathlib import Path
@@ -26,8 +33,9 @@ from torchvision import transforms as T
 
 import timm
 
-import warnings
-warnings.filterwarnings('ignore')
+# Suppress multiprocessing errors
+logging.getLogger('torch.multiprocessing').setLevel(logging.ERROR)
+
 tqdm.pandas()
 
 print(f"PyTorch version: {torch.__version__}")
@@ -55,13 +63,13 @@ class CFG:
     MODELS_DIR = Path("/kaggle/input/csiro-dinov3-trained")
     
     # === Model ===
-    model_name = "vit_large_patch16_dinov3_qkvb"
+    model_name = "vit_large_patch16_dinov3_qkvb.lvd1689m"  # 전체 모델명 (timm HF 태그 포함)
     backbone_dim = 1024
     img_size = (512, 512)
     
     # === Inference ===
     batch_size = 32
-    num_workers = 4
+    num_workers = 0  # 0 to avoid multiprocessing cleanup errors
     device = "cuda" if torch.cuda.is_available() else "cpu"
 
 cfg = CFG()
@@ -176,7 +184,7 @@ class CSIROModel(nn.Module):
         
         def make_head():
             return nn.Sequential(
-                nn.Linear(feat_dim * 2, 256),
+                nn.Linear(feat_dim * 2, 256),  # 학습된 모델과 일치
                 nn.ReLU(inplace=True),
                 nn.Dropout(dropout),
                 nn.Linear(256, 1)
@@ -199,7 +207,7 @@ class CSIROModel(nn.Module):
         right_mod = right_feat * (1 + gamma) + beta
         
         combined = torch.cat([left_mod, right_mod], dim=1)
-        combined = self.dropout(combined)
+        # 070.py: combined에 dropout 미적용
         
         green = self.softplus(self.head_green(combined))
         clover = self.softplus(self.head_clover(combined))

@@ -1,4 +1,4 @@
 data/
-*.log
+# *.log
 src/
 kaggle_weights/
