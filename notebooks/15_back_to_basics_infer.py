@@ -6,8 +6,7 @@
 #
 # **필요 Datasets**:
 # 1. `csiro-biomass` (competition data)
-# 2. `pretrained-weights-biomass` (DINOv3 backbone weights)
-# 3. 학습된 모델 Dataset (직접 업로드)
+# 2. 학습된 모델 Dataset (직접 업로드) - backbone weights 포함
 
 #%%
 import warnings
@@ -53,28 +52,23 @@ seed_everything(42)
 class CFG:
     # === 경로 (Kaggle) ===
     DATA_PATH = Path("/kaggle/input/csiro-biomass")
-    
-    # DINOv3 backbone weights (timm이 이 이름을 인식하도록 등록)
-    BACKBONE_WEIGHTS = Path("/kaggle/input/pretrained-weights-biomass/dinov3_large/dinov3_large/dinov3_vitl16_qkvb.pth")
-    
-    # ⚠️ 이 경로를 업로드한 모델 Dataset 경로로 변경하세요
+
+    # ⚠️ 학습된 모델 Dataset 경로 (업로드 후 변경)
     MODELS_DIR = Path("/kaggle/input/csiro-v15-models")
-    
-    # === Model ===
-    # pretrained-weights-biomass Dataset에 등록된 모델명
-    model_name = "vit_large_patch16_dinov3_qkvb"
+
+    # === Model (학습 코드와 동일해야 함) ===
+    model_name = "vit_large_patch16_dinov3_qkvb.lvd1689m"  # 전체 모델명
     img_size = (512, 512)
-    dropout = 0.1
-    
+    dropout = 0.1  # 추론시 비활성화되지만 architecture 일치 필요
+
     # === Inference ===
     batch_size = 32
-    num_workers = 0  # Kaggle에서 multiprocessing 에러 방지
+    num_workers = 0  # Kaggle multiprocessing 에러 방지
     device = "cuda" if torch.cuda.is_available() else "cpu"
 
 cfg = CFG()
 print(f"Device: {cfg.device}")
 print(f"Models: {cfg.MODELS_DIR}")
-print(f"Backbone: {cfg.BACKBONE_WEIGHTS}")
 
 #%% [markdown]
 # ## 📊 Dataset
@@ -162,25 +156,13 @@ class FiLM(nn.Module):
 
 
 class CSIROModel(nn.Module):
-    """v15 Model - v12 기반"""
-    def __init__(self, model_name, backbone_weights_path=None, dropout=0.1):
+    """v15 Model - v12 기반 (fold weights가 backbone 포함 전체 덮어쓰므로 pretrained 불필요)"""
+    def __init__(self, model_name, dropout=0.1):
         super().__init__()
-        
-        # Backbone - hf_hub prefix로 HuggingFace에서 architecture 로드
-        # 그 후 local backbone weights로 덮어씀
-        print(f"Creating backbone: {model_name}")
+
+        # Backbone architecture만 생성 (weights는 fold checkpoint에서 로드됨)
         self.backbone = timm.create_model(model_name, pretrained=False, num_classes=0, global_pool='avg')
-        
-        if backbone_weights_path and Path(backbone_weights_path).exists():
-            print(f"Loading backbone weights from: {backbone_weights_path}")
-            backbone_state = torch.load(backbone_weights_path, map_location='cpu', weights_only=True)
-            self.backbone.load_state_dict(backbone_state, strict=False)
-            print("✓ Backbone weights loaded")
-        else:
-            print(f"WARNING: Backbone weights not found, using random init")
-        
         feat_dim = self.backbone.num_features  # 1024
-        print(f"Feature dim: {feat_dim}")
         
         self.film = FiLM(feat_dim)
         
@@ -267,18 +249,12 @@ def predict_ensemble(cfg, tta_loaders):
     
     for model_file in model_files:
         print(f"\nLoading {model_file.name}...")
-        
-        # 1. Backbone architecture 생성 + backbone weights 로드
-        model = CSIROModel(
-            cfg.model_name, 
-            backbone_weights_path=cfg.BACKBONE_WEIGHTS,
-            dropout=cfg.dropout
-        ).to(cfg.device)
-        
-        # 2. 학습된 fold weights로 전체 덮어쓰기
-        state_dict = torch.load(model_file, map_location=cfg.device)
+
+        # Model architecture 생성 후 fold checkpoint로 전체 weights 로드
+        model = CSIROModel(cfg.model_name, dropout=cfg.dropout).to(cfg.device)
+        state_dict = torch.load(model_file, map_location=cfg.device, weights_only=True)
         model.load_state_dict(state_dict)
-        print("✓ Fold weights loaded")
+        print("✓ Weights loaded")
         
         preds, ids = predict_with_tta(model, tta_loaders, cfg.device)
         all_fold_preds.append(preds)
