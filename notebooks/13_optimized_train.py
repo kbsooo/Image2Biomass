@@ -103,24 +103,31 @@ cfg = CFG()
 # ## Kaggle Data Download (Colab)
 
 #%%
-# Colab에서 실행시 주석 해제
-# import kagglehub
-# kagglehub.login()
-# 
-# csiro_biomass_path = kagglehub.competition_download('csiro-biomass')
-# kbsooo_pretrained_weights_biomass_path = kagglehub.dataset_download('kbsooo/pretrained-weights-biomass')
-# 
-# cfg.DATA_PATH = Path(csiro_biomass_path)
-# cfg.WEIGHTS_PATH = Path(kbsooo_pretrained_weights_biomass_path) / "dinov3_large" / "dinov3_large"
-# print(f"Data path: {cfg.DATA_PATH}")
-# print(f"Weights path: {cfg.WEIGHTS_PATH}")
+# 환경 자동 감지 및 데이터 로드
+import kagglehub
 
-# Kaggle 환경 (기본값)
-if cfg.DATA_PATH is None:
+# Kaggle 환경 체크
+if Path("/kaggle/input/csiro-biomass").exists():
+    # Kaggle 노트북 환경
     cfg.DATA_PATH = Path("/kaggle/input/csiro-biomass")
     cfg.WEIGHTS_PATH = Path("/kaggle/input/pretrained-weights-biomass/dinov3_large/dinov3_large")
+    cfg.OUTPUT_DIR = Path("/kaggle/working")
+    print("🔵 Kaggle 환경 감지")
+else:
+    # Colab 환경 - kagglehub로 다운로드
+    print("🟢 Colab 환경 - kagglehub로 데이터 다운로드 중...")
+    kagglehub.login()
+    
+    csiro_biomass_path = kagglehub.competition_download('csiro-biomass')
+    weights_path = kagglehub.dataset_download('kbsooo/pretrained-weights-biomass')
+    
+    cfg.DATA_PATH = Path(csiro_biomass_path)
+    cfg.WEIGHTS_PATH = Path(weights_path) / "dinov3_large" / "dinov3_large"
+    cfg.OUTPUT_DIR = Path("/content/output")
 
 cfg.OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+print(f"Data path: {cfg.DATA_PATH}")
+print(f"Weights path: {cfg.WEIGHTS_PATH}")
 print(f"Device: {cfg.device}")
 print(f"Config: epochs={cfg.epochs}, batch={cfg.batch_size}, lr={cfg.lr}")
 
