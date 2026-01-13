@@ -108,7 +108,7 @@ class CFG:
     # === Model ===
     model_name = "vit_large_patch16_dinov3_qkvb.lvd1689m"
     backbone_dim = 1024
-    img_size = (518, 518)  # DINOv2 optimal (14 * 37)
+    img_size = (512, 512)  # patch16 모델이므로 16의 배수 필요
 
     # === Head Architecture ===
     head_hidden_dim = 128  # 8은 실패, 256은 CV 0.6 → 중간값 시도

@@ -40,7 +40,7 @@ class CFG:
     MODELS_DIR = Path("/kaggle/input/csiro-improved-models")  # 학습된 모델
 
     model_name = "vit_large_patch16_dinov3_qkvb.lvd1689m"
-    img_size = (518, 518)
+    img_size = (512, 512)  # patch16 모델
 
     # Must match training config
     head_hidden_dim = 128

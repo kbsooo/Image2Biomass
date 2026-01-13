@@ -32,7 +32,7 @@ class CFG:
     WEIGHTS_PATH = Path("/kaggle/input/pretrained-weights-biomass/dinov3_large/dinov3_large")
     
     model_name = "vit_large_patch16_dinov3_qkvb.lvd1689m"  # DINOv3 Large
-    img_size = (518, 518)
+    img_size = (512, 512)  # patch16 모델
     dropout = 0.3
     
     use_tta = True
