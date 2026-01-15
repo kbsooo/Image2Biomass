@@ -53,16 +53,15 @@ seed_everything(42)
 #%%
 class CFG:
     DATA_PATH = Path("/kaggle/input/csiro-biomass")
+    BACKBONE_WEIGHTS = Path("/kaggle/input/pretrained-weights-biomass/dinov3_large/dinov3_large/dinov3_vitl16_qkvb.pth")
     
     # ⚠️ 이 경로를 업로드한 모델 Dataset 경로로 변경하세요
     MODELS_DIR = Path("/kaggle/input/csiro-v17-models")
     
-    # 표준 ViT-Large 아키텍처 (timm이 인식 가능)
-    # 실제 weights는 fold model에서 로드됨
-    model_name = "vit_large_patch16_224"
+    model_name = "vit_large_patch16_dinov3_qkvb.lvd1689m"
     img_size = (512, 512)
     
-    # v17과 동일한 head 구조
+    # Optuna best (v17 train과 동일해야 함!)
     hidden_dim = 512
     num_layers = 3
     dropout = 0.1
@@ -167,7 +166,7 @@ def get_tta_dataloaders(df, cfg):
     return loaders
 
 #%% [markdown]
-# ## 🧠 Model
+# ## 🧠 Model (17_optuna_optimized_infer.py와 동일)
 
 #%%
 class FiLM(nn.Module):
@@ -185,6 +184,7 @@ class FiLM(nn.Module):
 
 
 def make_head(in_dim: int, hidden_dim: int, num_layers: int, dropout: float, use_layernorm: bool):
+    """동적 head 생성 - v16/v17 train과 동일"""
     layers = []
     current_dim = in_dim
     
@@ -204,24 +204,33 @@ def make_head(in_dim: int, hidden_dim: int, num_layers: int, dropout: float, use
 
 
 class CSIROModelV17(nn.Module):
-    """v17 모델 - 표준 ViT 아키텍처로 시작, fold weights로 덮어씀"""
-    def __init__(self, cfg):
+    """v17 Optuna-optimized architecture - train과 동일한 구조"""
+    def __init__(self, cfg, backbone_weights_path=None):
         super().__init__()
         
-        # 표준 ViT-Large 아키텍처 (timm이 인식 가능)
-        # pretrained=False로 빈 모델 생성, 나중에 fold weights로 채움
-        self.backbone = timm.create_model(cfg.model_name, pretrained=False, num_classes=0, global_pool='avg')
+        # Backbone - 먼저 architecture 로드 후 weights 적용
+        if backbone_weights_path and Path(backbone_weights_path).exists():
+            print(f"Loading backbone from: {backbone_weights_path}")
+            self.backbone = timm.create_model(cfg.model_name, pretrained=False, num_classes=0, global_pool='avg')
+            state = torch.load(backbone_weights_path, map_location='cpu', weights_only=True)
+            self.backbone.load_state_dict(state, strict=False)
+            print("✓ Backbone loaded")
+        else:
+            print("WARNING: Backbone weights not found!")
+            self.backbone = timm.create_model(cfg.model_name, pretrained=True, num_classes=0, global_pool='avg')
         
-        feat_dim = self.backbone.num_features  # 1024
+        feat_dim = self.backbone.num_features
         combined_dim = feat_dim * 2
         
         self.film = FiLM(feat_dim)
         
+        # v17 train과 동일한 make_head 사용
         self.head_green = make_head(combined_dim, cfg.hidden_dim, cfg.num_layers, cfg.dropout, cfg.use_layernorm)
         self.head_clover = make_head(combined_dim, cfg.hidden_dim, cfg.num_layers, cfg.dropout, cfg.use_layernorm)
         self.head_dead = make_head(combined_dim, cfg.hidden_dim, cfg.num_layers, cfg.dropout, cfg.use_layernorm)
         
         self.softplus = nn.Softplus(beta=1.0)
+        print(f"Model: hidden={cfg.hidden_dim}, layers={cfg.num_layers}, LayerNorm={cfg.use_layernorm}")
     
     def forward(self, left_img, right_img):
         left_feat = self.backbone(left_img)
@@ -308,13 +317,10 @@ def predict_ensemble(cfg, tta_loaders):
     for model_file in model_files:
         print(f"\nLoading {model_file.name}...")
         
-        # 1. 빈 모델 아키텍처 생성
-        model = CSIROModelV17(cfg).to(cfg.device)
-        
-        # 2. fold weights 로드 (backbone 포함 전체 덮어씀)
-        state_dict = torch.load(model_file, map_location=cfg.device)
-        model.load_state_dict(state_dict)
-        print("✓ Weights loaded")
+        # 17_optuna_optimized_infer.py와 동일한 방식
+        model = CSIROModelV17(cfg, cfg.BACKBONE_WEIGHTS).to(cfg.device)
+        model.load_state_dict(torch.load(model_file, map_location=cfg.device))
+        print("✓ Fold weights loaded")
         
         preds, ids = predict_with_tta(model, tta_loaders, cfg.device, cfg.use_median)
         all_fold_preds.append(preds)
