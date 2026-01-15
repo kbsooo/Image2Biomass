@@ -53,15 +53,16 @@ seed_everything(42)
 #%%
 class CFG:
     DATA_PATH = Path("/kaggle/input/csiro-biomass")
-    BACKBONE_WEIGHTS = Path("/kaggle/input/pretrained-weights-biomass/dinov3_large/dinov3_large/dinov3_vitl16_qkvb.pth")
     
     # ⚠️ 이 경로를 업로드한 모델 Dataset 경로로 변경하세요
     MODELS_DIR = Path("/kaggle/input/csiro-v17-models")
     
-    model_name = "vit_large_patch16_dinov3_qkvb.lvd1689m"
+    # 표준 ViT-Large 아키텍처 (timm이 인식 가능)
+    # 실제 weights는 fold model에서 로드됨
+    model_name = "vit_large_patch16_224"
     img_size = (512, 512)
     
-    # Optuna best
+    # v17과 동일한 head 구조
     hidden_dim = 512
     num_layers = 3
     dropout = 0.1
@@ -73,7 +74,6 @@ class CFG:
     use_median = False         # Median ensemble (alternative)
     
     # Clipping bounds (train 데이터 기반)
-    # 각 target의 max 값을 약간 초과하는 범위로 설정
     clip_bounds = {
         'Dry_Green_g': (0, 150),
         'Dry_Dead_g': (0, 150),
@@ -204,17 +204,15 @@ def make_head(in_dim: int, hidden_dim: int, num_layers: int, dropout: float, use
 
 
 class CSIROModelV17(nn.Module):
-    def __init__(self, cfg, backbone_weights_path=None):
+    """v17 모델 - 표준 ViT 아키텍처로 시작, fold weights로 덮어씀"""
+    def __init__(self, cfg):
         super().__init__()
         
-        if backbone_weights_path and Path(backbone_weights_path).exists():
-            self.backbone = timm.create_model(cfg.model_name, pretrained=False, num_classes=0, global_pool='avg')
-            state = torch.load(backbone_weights_path, map_location='cpu', weights_only=True)
-            self.backbone.load_state_dict(state, strict=False)
-        else:
-            self.backbone = timm.create_model(cfg.model_name, pretrained=True, num_classes=0, global_pool='avg')
+        # 표준 ViT-Large 아키텍처 (timm이 인식 가능)
+        # pretrained=False로 빈 모델 생성, 나중에 fold weights로 채움
+        self.backbone = timm.create_model(cfg.model_name, pretrained=False, num_classes=0, global_pool='avg')
         
-        feat_dim = self.backbone.num_features
+        feat_dim = self.backbone.num_features  # 1024
         combined_dim = feat_dim * 2
         
         self.film = FiLM(feat_dim)
@@ -310,8 +308,13 @@ def predict_ensemble(cfg, tta_loaders):
     for model_file in model_files:
         print(f"\nLoading {model_file.name}...")
         
-        model = CSIROModelV17(cfg, cfg.BACKBONE_WEIGHTS).to(cfg.device)
-        model.load_state_dict(torch.load(model_file, map_location=cfg.device))
+        # 1. 빈 모델 아키텍처 생성
+        model = CSIROModelV17(cfg).to(cfg.device)
+        
+        # 2. fold weights 로드 (backbone 포함 전체 덮어씀)
+        state_dict = torch.load(model_file, map_location=cfg.device)
+        model.load_state_dict(state_dict)
+        print("✓ Weights loaded")
         
         preds, ids = predict_with_tta(model, tta_loaders, cfg.device, cfg.use_median)
         all_fold_preds.append(preds)
