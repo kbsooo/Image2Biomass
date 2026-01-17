@@ -253,6 +253,10 @@ def configure_tent(model, cfg):
     
     print(f"TENT: {len(trainable_params)} LayerNorm parameters trainable")
     
+    if len(trainable_params) == 0:
+        print("Warning: No LayerNorm parameters found, TENT disabled")
+        return model, None
+    
     optimizer = torch.optim.Adam(trainable_params, lr=cfg.tent_lr)
     
     return model, optimizer
@@ -266,30 +270,37 @@ def tent_adapt_batch(model, optimizer, left_augs, right_augs, cfg):
         left_augs: [B, num_augs, C, H, W]
         right_augs: [B, num_augs, C, H, W]
     """
-    B, N, C, H, W = left_augs.shape
+    if optimizer is None:
+        return 0.0  # TENT disabled
     
-    for step in range(cfg.tent_steps):
-        all_preds = []
+    try:
+        B, N, C, H, W = left_augs.shape
         
-        # 각 augmentation에 대해 예측
-        for i in range(N):
-            left = left_augs[:, i]  # [B, C, H, W]
-            right = right_augs[:, i]
+        for step in range(cfg.tent_steps):
+            all_preds = []
             
-            pred = model(left, right)  # [B, 5]
-            all_preds.append(pred)
+            # 각 augmentation에 대해 예측
+            for i in range(N):
+                left = left_augs[:, i]  # [B, C, H, W]
+                right = right_augs[:, i]
+                
+                pred = model(left, right)  # [B, 5]
+                all_preds.append(pred)
+            
+            # [N, B, 5] -> variance 계산
+            preds_stack = torch.stack(all_preds, dim=0)  # [N, B, 5]
+            
+            # Prediction variance를 loss로 사용 (variance가 작을수록 confident)
+            variance = torch.var(preds_stack, dim=0).mean()  # scalar
+            
+            optimizer.zero_grad()
+            variance.backward()
+            optimizer.step()
         
-        # [N, B, 5] -> variance 계산
-        preds_stack = torch.stack(all_preds, dim=0)  # [N, B, 5]
-        
-        # Prediction variance를 loss로 사용 (variance가 작을수록 confident)
-        variance = torch.var(preds_stack, dim=0).mean()  # scalar
-        
-        optimizer.zero_grad()
-        variance.backward()
-        optimizer.step()
-    
-    return variance.item()
+        return variance.item()
+    except Exception as e:
+        print(f"TENT adapt error: {e}")
+        return 0.0
 
 #%% [markdown]
 # ## 🔮 Inference with TENT
@@ -305,21 +316,34 @@ def predict_with_tent(model, loader, cfg, device):
     all_variances = []
     
     for left_base, right_base, left_augs, right_augs, ids in tqdm(loader, desc="TENT"):
-        left_base = left_base.to(device)
-        right_base = right_base.to(device)
-        left_augs = left_augs.to(device)
-        right_augs = right_augs.to(device)
-        
-        # 1. TENT 적응 (이 배치의 분포에 맞게 LayerNorm 업데이트)
-        var = tent_adapt_batch(model, optimizer, left_augs, right_augs, cfg)
-        all_variances.append(var)
-        
-        # 2. 최종 예측 (기본 transform 사용)
-        with torch.no_grad():
-            outputs = model(left_base, right_base)
-        
-        all_outputs.append(outputs.cpu().numpy())
-        all_ids.extend(ids)
+        try:
+            left_base = left_base.to(device)
+            right_base = right_base.to(device)
+            left_augs = left_augs.to(device)
+            right_augs = right_augs.to(device)
+            
+            # 1. TENT 적응 (이 배치의 분포에 맞게 LayerNorm 업데이트)
+            var = tent_adapt_batch(model, optimizer, left_augs, right_augs, cfg)
+            all_variances.append(var)
+            
+            # 메모리 정리
+            del left_augs, right_augs
+            torch.cuda.empty_cache()
+            
+            # 2. 최종 예측 (기본 transform 사용)
+            with torch.no_grad():
+                outputs = model(left_base, right_base)
+            
+            all_outputs.append(outputs.cpu().numpy())
+            all_ids.extend(ids)
+            
+        except Exception as e:
+            print(f"Batch error: {e}")
+            # 에러 시 기본 예측
+            with torch.no_grad():
+                outputs = model(left_base.to(device), right_base.to(device))
+            all_outputs.append(outputs.cpu().numpy())
+            all_ids.extend(ids)
     
     print(f"Average variance: {np.mean(all_variances):.6f}")
     
