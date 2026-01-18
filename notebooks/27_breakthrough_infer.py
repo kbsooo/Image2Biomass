@@ -206,6 +206,71 @@ class CSIROModelBase(nn.Module):
         return torch.cat([green, dead, clover, gdm, total], dim=1)
 
 
+class CSIROModelV22(nn.Module):
+    """v22 전용 모델 (Frozen backbone, 더 작은 head)"""
+    def __init__(self, cfg, backbone_weights_path=None):
+        super().__init__()
+        
+        if backbone_weights_path and Path(backbone_weights_path).exists():
+            self.backbone = timm.create_model(cfg.model_name, pretrained=False, 
+                                               num_classes=0, global_pool='avg')
+            state = torch.load(backbone_weights_path, map_location='cpu', weights_only=True)
+            self.backbone.load_state_dict(state, strict=False)
+        else:
+            self.backbone = timm.create_model(cfg.model_name, pretrained=True, 
+                                               num_classes=0, global_pool='avg')
+        
+        feat_dim = self.backbone.num_features
+        combined_dim = feat_dim * 2
+        
+        self.film = FiLM(feat_dim)
+        
+        # v22: hidden_dim=256, num_layers=2
+        v22_hidden = 256
+        v22_layers = 2
+        v22_dropout = 0.3
+        
+        self.head_green = self._make_head_v22(combined_dim, v22_hidden, v22_layers, v22_dropout)
+        self.head_clover = self._make_head_v22(combined_dim, v22_hidden, v22_layers, v22_dropout)
+        self.head_dead = self._make_head_v22(combined_dim, v22_hidden, v22_layers, v22_dropout)
+        
+        self.softplus = nn.Softplus(beta=1.0)
+    
+    def _make_head_v22(self, in_dim, hidden_dim, num_layers, dropout):
+        layers = []
+        current_dim = in_dim
+        for i in range(num_layers):
+            layers.append(nn.Linear(current_dim, hidden_dim))
+            if i < num_layers - 1:
+                layers.append(nn.LayerNorm(hidden_dim))
+                layers.append(nn.ReLU(inplace=True))
+                layers.append(nn.Dropout(dropout))
+            current_dim = hidden_dim
+        layers.append(nn.Linear(hidden_dim, 1))
+        return nn.Sequential(*layers)
+    
+    def forward(self, left_img, right_img):
+        left_feat = self.backbone(left_img)
+        right_feat = self.backbone(right_img)
+        
+        context = (left_feat + right_feat) / 2
+        gamma, beta = self.film(context)
+        
+        left_mod = left_feat * (1 + gamma) + beta
+        right_mod = right_feat * (1 + gamma) + beta
+        
+        combined = torch.cat([left_mod, right_mod], dim=1)
+        
+        green = self.softplus(self.head_green(combined))
+        clover = self.softplus(self.head_clover(combined))
+        dead = self.softplus(self.head_dead(combined))
+        
+        gdm = green + clover
+        total = gdm + dead
+        
+        return torch.cat([green, dead, clover, gdm, total], dim=1)
+
+
 class VegetationEncoder(nn.Module):
     """v25용 Vegetation Index Encoder"""
     def __init__(self, in_channels=2, out_dim=128):
@@ -362,7 +427,7 @@ def predict_version(version, model_dir, test_df, cfg, device):
     final_ids = None
     
     if version == 'v25':
-        # v25는 별도 처리
+        # v25는 별도 처리 (VegIdx 포함)
         for model_file in model_files:
             print(f"Loading {model_file.name}...")
             model = CSIROModelV25(cfg, cfg.BACKBONE_WEIGHTS).to(device)
@@ -376,8 +441,28 @@ def predict_version(version, model_dir, test_df, cfg, device):
             del model
             gc.collect()
             torch.cuda.empty_cache()
+    elif version == 'v22':
+        # v22는 별도 모델 구조 (hidden_dim=256, num_layers=2)
+        transform = get_test_transform(cfg)
+        dataset = TestDataset(test_df, cfg, transform)
+        loader = DataLoader(dataset, batch_size=cfg.batch_size, shuffle=False,
+                           num_workers=cfg.num_workers, pin_memory=True)
+        
+        for model_file in model_files:
+            print(f"Loading {model_file.name}...")
+            model = CSIROModelV22(cfg, cfg.BACKBONE_WEIGHTS).to(device)
+            model.load_state_dict(torch.load(model_file, map_location=device))
+            
+            preds, ids = predict_base_model(model, loader, device)
+            all_fold_preds.append(preds)
+            if final_ids is None:
+                final_ids = ids
+            
+            del model
+            gc.collect()
+            torch.cuda.empty_cache()
     else:
-        # v20/v22/v23/v26
+        # v20/v23/v26
         transform = get_test_transform(cfg)
         dataset = TestDataset(test_df, cfg, transform)
         loader = DataLoader(dataset, batch_size=cfg.batch_size, shuffle=False,
