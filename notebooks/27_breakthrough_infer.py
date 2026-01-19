@@ -508,32 +508,38 @@ def weighted_average(predictions_dict, weights):
 
 
 def rank_average(predictions_dict):
-    """순위 기반 평균 (outlier에 강함)"""
+    """순위 기반 평균 (outlier에 강함) - 정규화된 순위 평균"""
     preds_list = [v for v in predictions_dict.values() if v is not None]
+    n_models = len(preds_list)
     n_samples, n_targets = preds_list[0].shape
     
-    # 각 모델별, 타겟별로 순위 계산
-    ranks = []
+    # 각 모델별, 타겟별로 순위 계산 (0-1 범위로 정규화)
+    normalized_ranks = []
     for pred in preds_list:
         rank = np.zeros_like(pred)
         for t in range(n_targets):
-            rank[:, t] = rankdata(pred[:, t])
-        ranks.append(rank)
+            r = rankdata(pred[:, t])
+            rank[:, t] = (r - 1) / (n_samples - 1)  # 0-1 범위
+        normalized_ranks.append(rank)
     
-    # 순위 평균
-    avg_rank = np.mean(ranks, axis=0)
+    # 정규화된 순위 평균
+    avg_rank = np.mean(normalized_ranks, axis=0)
     
-    # 순위를 값으로 변환 (전체 예측의 중앙값 기준)
-    all_preds = np.concatenate(preds_list, axis=0)
+    # 각 타겟별로 정렬된 값에서 보간
     result = np.zeros((n_samples, n_targets))
     
     for t in range(n_targets):
-        sorted_vals = np.sort(all_preds[:, t])
-        # 평균 순위에 해당하는 값 추정
+        # 모든 모델의 해당 타겟 값 결합
+        all_vals = np.concatenate([p[:, t] for p in preds_list])
+        sorted_vals = np.sort(all_vals)
+        
+        # 평균 순위에 해당하는 값 보간
         for i in range(n_samples):
-            idx = int(avg_rank[i, t] / len(preds_list)) - 1
-            idx = max(0, min(idx, len(sorted_vals) - 1))
-            result[i, t] = sorted_vals[idx]
+            idx = avg_rank[i, t] * (len(sorted_vals) - 1)
+            idx_low = int(np.floor(idx))
+            idx_high = min(idx_low + 1, len(sorted_vals) - 1)
+            frac = idx - idx_low
+            result[i, t] = sorted_vals[idx_low] * (1 - frac) + sorted_vals[idx_high] * frac
     
     return result
 

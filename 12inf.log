@@ -1,0 +1,67 @@
+11.9s 1 0.00s - Debugger warning: It seems that frozen modules are being used, which may
+11.9s 2 0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off
+11.9s 3 0.00s - to python to disable frozen modules.
+11.9s 4 0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.
+12.7s 5 0.00s - Debugger warning: It seems that frozen modules are being used, which may
+12.7s 6 0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off
+12.7s 7 0.00s - to python to disable frozen modules.
+12.7s 8 0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.
+32.6s 9 /usr/local/lib/python3.12/dist-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The 'repr' attribute with value False was provided to the `Field()` function, which has no effect in the context it was used. 'repr' is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+32.6s 10 warnings.warn(
+32.6s 11 /usr/local/lib/python3.12/dist-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The 'frozen' attribute with value True was provided to the `Field()` function, which has no effect in the context it was used. 'frozen' is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+32.6s 12 warnings.warn(
+32.6s 13 
+32.6s 14 /usr/local/lib/python3.12/dist-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The 'repr' attribute with value False was provided to the `Field()` function, which has no effect in the context it was used. 'repr' is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+32.6s 15 warnings.warn(
+32.6s 16 /usr/local/lib/python3.12/dist-packages/pydantic/_internal/_generate_schema.py:2249: UnsupportedFieldAttributeWarning: The 'frozen' attribute with value True was provided to the `Field()` function, which has no effect in the context it was used. 'frozen' is field-specific metadata, and can only be attached to a model field using `Annotated` metadata or by assignment. This may have happened because an `Annotated` type alias using the `type` statement was used, or if the `Field()` function was attached to a single member of a union type.
+32.6s 17 warnings.warn(
+35.7s 18 PyTorch version: 2.8.0+cu126
+35.7s 19 CUDA available: True
+35.7s 20 Device: cuda
+35.8s 21 Test samples: 1
+35.9s 22 Found 5 model files
+35.9s 23 
+35.9s 24 Loading model_fold0.pth...
+35.9s 25 Loading backbone from: /kaggle/input/pretrained-weights-biomass/dinov3_large/dinov3_large/dinov3_vitl16_qkvb.pth
+49.6s 26 ✓ Backbone loaded from local weights
+61.0s 27 
+61.0s 28 Loading model_fold1.pth...
+61.0s 29 Loading backbone from: /kaggle/input/pretrained-weights-biomass/dinov3_large/dinov3_large/dinov3_vitl16_qkvb.pth
+66.3s 30 ✓ Backbone loaded from local weights
+76.5s 31 
+76.5s 32 Loading model_fold2.pth...
+76.5s 33 Loading backbone from: /kaggle/input/pretrained-weights-biomass/dinov3_large/dinov3_large/dinov3_vitl16_qkvb.pth
+81.8s 34 ✓ Backbone loaded from local weights
+95.5s 35 
+95.5s 36 Loading model_fold3.pth...
+95.5s 37 Loading backbone from: /kaggle/input/pretrained-weights-biomass/dinov3_large/dinov3_large/dinov3_vitl16_qkvb.pth
+100.7s 38 ✓ Backbone loaded from local weights
+114.2s 39 
+114.2s 40 Loading model_fold4.pth...
+114.2s 41 Loading backbone from: /kaggle/input/pretrained-weights-biomass/dinov3_large/dinov3_large/dinov3_vitl16_qkvb.pth
+119.1s 42 ✓ Backbone loaded from local weights
+131.3s 43 Predictions shape: (1, 5)
+131.4s 44 
+131.4s 45 Submission saved: 5 rows
+131.4s 46 sample_id     target
+131.4s 47 0   ID1001187975__Dry_Green_g  30.951889
+131.4s 48 1    ID1001187975__Dry_Dead_g  21.387386
+131.4s 49 2  ID1001187975__Dry_Clover_g   0.348773
+131.4s 50 3         ID1001187975__GDM_g  31.300663
+131.4s 51 4   ID1001187975__Dry_Total_g  52.688049
+131.4s 52 
+131.4s 53 Expected rows: 5
+131.4s 54 Actual rows: 5
+131.4s 55 ✓ Submission format verified!
+136.6s 56 /usr/local/lib/python3.12/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\|'
+136.6s 57 cells[i][c] = re.sub('\\\\\|', '|', cell)
+136.8s 58 /usr/local/lib/python3.12/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\_'
+136.8s 59 text = re.sub(r'_', '\_', text) # Escape underscores in display text
+137.5s 60 /usr/local/lib/python3.12/dist-packages/traitlets/traitlets.py:2915: FutureWarning: --Exporter.preprocessors=["remove_papermill_header.RemovePapermillHeader"] for containers is deprecated in traitlets 5.0. You can pass `--Exporter.preprocessors item` ... multiple times to add items to a list.
+137.5s 61 warn(
+137.6s 62 [NbConvertApp] Converting notebook __notebook__.ipynb to notebook
+137.9s 63 [NbConvertApp] Writing 200622 bytes to __notebook__.ipynb
+140.4s 64 /usr/local/lib/python3.12/dist-packages/traitlets/traitlets.py:2915: FutureWarning: --Exporter.preprocessors=["nbconvert.preprocessors.ExtractOutputPreprocessor"] for containers is deprecated in traitlets 5.0. You can pass `--Exporter.preprocessors item` ... multiple times to add items to a list.
+140.4s 65 warn(
+140.4s 66 [NbConvertApp] Converting notebook __notebook__.ipynb to html
+141.3s 67 [NbConvertApp] Writing 471676 bytes to __results__.html

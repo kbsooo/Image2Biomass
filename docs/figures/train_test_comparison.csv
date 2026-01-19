@@ -1,0 +1,10 @@
+Metric,Train Mean,Train Std,Test Mean,Test Std,Difference,Cohen d,Shift
+mean_R,0.4417,0.0627,0.4849,nan,0.0432,0.000,✓ Small
+mean_G,0.5036,0.0603,0.4768,nan,-0.0269,0.000,✓ Small
+mean_B,0.3058,0.0766,0.3671,nan,0.0613,0.000,✓ Small
+green_ratio,0.4045,0.0407,0.3588,nan,-0.0457,0.000,✓ Small
+ExG,0.2597,0.1426,0.1015,nan,-0.1583,0.000,✓ Small
+VARI,0.1177,0.1200,-0.0170,nan,-0.1347,0.000,✓ Small
+GR_ratio,28388.8027,43080.2992,296.2908,nan,-28092.5119,0.000,✓ Small
+brightness,0.4171,0.0513,0.4429,nan,0.0259,0.000,✓ Small
+contrast,0.2499,0.0368,0.2735,nan,0.0236,0.000,✓ Small

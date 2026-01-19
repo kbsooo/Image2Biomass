@@ -1,0 +1,643 @@
+============================================================
+FOLD 0
+============================================================
+Train: 285, Val: 72
+Loading backbone from: /root/.cache/kagglehub/datasets/kbsooo/pretrained-weights-biomass/versions/3/dinov3_large/dinov3_large/dinov3_vitl16_qkvb.pth
+✓ Backbone loaded from local weights
+Backbone feature dim: 1024
+
+Epoch 1/15
+Training: 100%
+ 18/18 [00:38<00:00,  1.99s/it, loss=309]
+Validating: 100%
+ 3/3 [00:11<00:00,  3.41s/it]
+Loss: 610.4083 | CV: -2.2689
+  ✓ New best! Saved.
+
+Epoch 2/15
+Training: 100%
+ 18/18 [00:37<00:00,  1.98s/it, loss=437]
+Validating: 100%
+ 3/3 [00:11<00:00,  3.28s/it]
+Loss: 502.8732 | CV: -0.0053
+  ✓ New best! Saved.
+
+Epoch 3/15
+Training: 100%
+ 18/18 [00:37<00:00,  1.99s/it, loss=190]
+Validating: 100%
+ 3/3 [00:11<00:00,  3.27s/it]
+Loss: 295.5590 | CV: 0.1833
+  ✓ New best! Saved.
+
+Epoch 4/15
+Training: 100%
+ 18/18 [00:37<00:00,  2.00s/it, loss=210]
+Validating: 100%
+ 3/3 [00:11<00:00,  3.25s/it]
+Loss: 206.3848 | CV: 0.3823
+  ✓ New best! Saved.
+
+Epoch 5/15
+Training: 100%
+ 18/18 [00:37<00:00,  1.99s/it, loss=182]
+Validating: 100%
+ 3/3 [00:11<00:00,  3.27s/it]
+Loss: 161.6110 | CV: 0.5195
+  ✓ New best! Saved.
+
+Epoch 6/15
+Training: 100%
+ 18/18 [00:37<00:00,  1.98s/it, loss=87.2]
+Validating: 100%
+ 3/3 [00:11<00:00,  3.27s/it]
+Loss: 126.6416 | CV: 0.5206
+  ✓ New best! Saved.
+
+Epoch 7/15
+Training: 100%
+ 18/18 [00:37<00:00,  1.99s/it, loss=50.4]
+Validating: 100%
+ 3/3 [00:11<00:00,  3.26s/it]
+Loss: 101.1436 | CV: 0.6035
+  ✓ New best! Saved.
+
+Epoch 8/15
+Training: 100%
+ 18/18 [00:37<00:00,  2.00s/it, loss=51.9]
+Validating: 100%
+ 3/3 [00:11<00:00,  3.30s/it]
+Loss: 84.9718 | CV: 0.6296
+  ✓ New best! Saved.
+
+Epoch 9/15
+Training: 100%
+ 18/18 [00:37<00:00,  1.99s/it, loss=81.6]
+Validating: 100%
+ 3/3 [00:11<00:00,  3.26s/it]
+Loss: 74.2073 | CV: 0.6504
+  ✓ New best! Saved.
+
+Epoch 10/15
+Training: 100%
+ 18/18 [00:37<00:00,  1.98s/it, loss=55.5]
+Validating: 100%
+ 3/3 [00:11<00:00,  3.28s/it]
+Loss: 68.6173 | CV: 0.6627
+  ✓ New best! Saved.
+
+Epoch 11/15
+Training: 100%
+ 18/18 [00:37<00:00,  1.98s/it, loss=27.5]
+Validating: 100%
+ 3/3 [00:11<00:00,  3.28s/it]
+Loss: 63.9776 | CV: 0.6596
+
+Epoch 12/15
+Training: 100%
+ 18/18 [00:37<00:00,  1.99s/it, loss=84.7]
+Validating: 100%
+ 3/3 [00:11<00:00,  3.29s/it]
+Loss: 59.6755 | CV: 0.6701
+  ✓ New best! Saved.
+
+Epoch 13/15
+Training: 100%
+ 18/18 [00:37<00:00,  1.99s/it, loss=64]
+Validating: 100%
+ 3/3 [00:11<00:00,  3.27s/it]
+Loss: 56.1934 | CV: 0.6683
+
+Epoch 14/15
+Training: 100%
+ 18/18 [00:37<00:00,  1.98s/it, loss=38]
+Validating: 100%
+ 3/3 [00:11<00:00,  3.26s/it]
+Loss: 54.9283 | CV: 0.6684
+
+Epoch 15/15
+Training: 100%
+ 18/18 [00:37<00:00,  1.98s/it, loss=66.6]
+Validating: 100%
+ 3/3 [00:11<00:00,  3.24s/it]
+Loss: 55.0044 | CV: 0.6680
+
+Fold 0 Best: 0.6701 (epoch 12)
+
+============================================================
+FOLD 1
+============================================================
+Train: 286, Val: 71
+Loading backbone from: /root/.cache/kagglehub/datasets/kbsooo/pretrained-weights-biomass/versions/3/dinov3_large/dinov3_large/dinov3_vitl16_qkvb.pth
+✓ Backbone loaded from local weights
+Backbone feature dim: 1024
+
+Epoch 1/15
+Training: 100%
+ 18/18 [00:37<00:00,  2.06s/it, loss=672]
+Validating: 100%
+ 3/3 [00:10<00:00,  3.18s/it]
+Loss: 584.4326 | CV: -1.2777
+  ✓ New best! Saved.
+
+Epoch 2/15
+Training: 100%
+ 18/18 [00:37<00:00,  2.03s/it, loss=248]
+Validating: 100%
+ 3/3 [00:10<00:00,  3.19s/it]
+Loss: 470.5260 | CV: 0.0097
+  ✓ New best! Saved.
+
+Epoch 3/15
+Training: 100%
+ 18/18 [00:37<00:00,  2.03s/it, loss=491]
+Validating: 100%
+ 3/3 [00:10<00:00,  3.18s/it]
+Loss: 288.3267 | CV: 0.2298
+  ✓ New best! Saved.
+
+Epoch 4/15
+Training: 100%
+ 18/18 [00:37<00:00,  2.03s/it, loss=170]
+Validating: 100%
+ 3/3 [00:10<00:00,  3.19s/it]
+Loss: 191.4027 | CV: 0.3778
+  ✓ New best! Saved.
+
+Epoch 5/15
+Training: 100%
+ 18/18 [00:37<00:00,  2.02s/it, loss=79.7]
+Validating: 100%
+ 3/3 [00:10<00:00,  3.19s/it]
+Loss: 155.1593 | CV: 0.5382
+  ✓ New best! Saved.
+
+Epoch 6/15
+Training: 100%
+ 18/18 [00:37<00:00,  2.04s/it, loss=126]
+Validating: 100%
+ 3/3 [00:10<00:00,  3.19s/it]
+Loss: 118.7030 | CV: 0.6197
+  ✓ New best! Saved.
+
+Epoch 7/15
+Training: 100%
+ 18/18 [00:37<00:00,  2.04s/it, loss=67.2]
+Validating: 100%
+ 3/3 [00:10<00:00,  3.18s/it]
+Loss: 94.9409 | CV: 0.6462
+  ✓ New best! Saved.
+
+Epoch 8/15
+Training: 100%
+ 18/18 [00:37<00:00,  2.02s/it, loss=60.6]
+Validating: 100%
+ 3/3 [00:11<00:00,  3.20s/it]
+Loss: 82.5489 | CV: 0.6754
+  ✓ New best! Saved.
+
+Epoch 9/15
+Training: 100%
+ 18/18 [00:37<00:00,  2.02s/it, loss=178]
+Validating: 100%
+ 3/3 [00:10<00:00,  3.19s/it]
+Loss: 74.9914 | CV: 0.6754
+  ✓ New best! Saved.
+
+Epoch 10/15
+Training: 100%
+ 18/18 [00:37<00:00,  2.03s/it, loss=103]
+Validating: 100%
+ 3/3 [00:10<00:00,  3.18s/it]
+Loss: 67.3090 | CV: 0.6908
+  ✓ New best! Saved.
+
+Epoch 11/15
+Training: 100%
+ 18/18 [00:37<00:00,  2.03s/it, loss=58.5]
+Validating: 100%
+ 3/3 [00:10<00:00,  3.18s/it]
+Loss: 61.1975 | CV: 0.6989
+  ✓ New best! Saved.
+
+Epoch 12/15
+Training: 100%
+ 18/18 [00:37<00:00,  2.04s/it, loss=88.1]
+Validating: 100%
+ 3/3 [00:11<00:00,  3.20s/it]
+Loss: 59.4874 | CV: 0.7061
+  ✓ New best! Saved.
+
+Epoch 13/15
+Training: 100%
+ 18/18 [00:37<00:00,  2.05s/it, loss=79.5]
+Validating: 100%
+ 3/3 [00:10<00:00,  3.17s/it]
+Loss: 56.3875 | CV: 0.7061
+
+Epoch 14/15
+Training: 100%
+ 18/18 [00:37<00:00,  2.03s/it, loss=55.2]
+Validating: 100%
+ 3/3 [00:11<00:00,  3.20s/it]
+Loss: 54.2618 | CV: 0.7067
+  ✓ New best! Saved.
+
+Epoch 15/15
+Training: 100%
+ 18/18 [00:37<00:00,  2.04s/it, loss=46.9]
+Validating: 100%
+ 3/3 [00:11<00:00,  3.21s/it]
+Loss: 54.2750 | CV: 0.7068
+  ✓ New best! Saved.
+
+Fold 1 Best: 0.7068 (epoch 15)
+
+============================================================
+FOLD 2
+============================================================
+Train: 286, Val: 71
+Loading backbone from: /root/.cache/kagglehub/datasets/kbsooo/pretrained-weights-biomass/versions/3/dinov3_large/dinov3_large/dinov3_vitl16_qkvb.pth
+✓ Backbone loaded from local weights
+Backbone feature dim: 1024
+
+Epoch 1/15
+Training: 100%
+ 18/18 [00:37<00:00,  2.04s/it, loss=694]
+Validating: 100%
+ 3/3 [00:10<00:00,  3.18s/it]
+Loss: 601.7587 | CV: -1.7417
+  ✓ New best! Saved.
+
+Epoch 2/15
+Training: 100%
+ 18/18 [00:37<00:00,  2.05s/it, loss=179]
+Validating: 100%
+ 3/3 [00:10<00:00,  3.18s/it]
+Loss: 475.7059 | CV: -0.0202
+  ✓ New best! Saved.
+
+Epoch 3/15
+Training: 100%
+ 18/18 [00:37<00:00,  2.03s/it, loss=353]
+Validating: 100%
+ 3/3 [00:10<00:00,  3.17s/it]
+Loss: 292.9980 | CV: 0.2100
+  ✓ New best! Saved.
+
+Epoch 4/15
+Training: 100%
+ 18/18 [00:37<00:00,  2.04s/it, loss=123]
+Validating: 100%
+ 3/3 [00:11<00:00,  3.20s/it]
+Loss: 198.2616 | CV: 0.0605
+
+Epoch 5/15
+Training: 100%
+ 18/18 [00:37<00:00,  2.05s/it, loss=90.1]
+Validating: 100%
+ 3/3 [00:11<00:00,  3.20s/it]
+Loss: 177.8349 | CV: 0.5281
+  ✓ New best! Saved.
+
+Epoch 6/15
+Training: 100%
+ 18/18 [00:38<00:00,  2.05s/it, loss=132]
+Validating: 100%
+ 3/3 [00:11<00:00,  3.20s/it]
+Loss: 117.8277 | CV: 0.5396
+  ✓ New best! Saved.
+
+Epoch 7/15
+Training: 100%
+ 18/18 [00:37<00:00,  2.04s/it, loss=190]
+Validating: 100%
+ 3/3 [00:10<00:00,  3.18s/it]
+Loss: 101.6706 | CV: 0.5794
+  ✓ New best! Saved.
+
+Epoch 8/15
+Training: 100%
+ 18/18 [00:37<00:00,  2.03s/it, loss=110]
+Validating: 100%
+ 3/3 [00:10<00:00,  3.18s/it]
+Loss: 86.6470 | CV: 0.5893
+  ✓ New best! Saved.
+
+Epoch 9/15
+Training: 100%
+ 18/18 [00:37<00:00,  2.02s/it, loss=43.9]
+Validating: 100%
+ 3/3 [00:10<00:00,  3.18s/it]
+Loss: 76.4296 | CV: 0.5914
+  ✓ New best! Saved.
+
+Epoch 10/15
+Training: 100%
+ 18/18 [00:37<00:00,  2.04s/it, loss=48.6]
+Validating: 100%
+ 3/3 [00:10<00:00,  3.18s/it]
+Loss: 66.8877 | CV: 0.6508
+  ✓ New best! Saved.
+
+Epoch 11/15
+Training: 100%
+ 18/18 [00:37<00:00,  2.04s/it, loss=39.9]
+Validating: 100%
+ 3/3 [00:11<00:00,  3.19s/it]
+Loss: 60.8227 | CV: 0.6539
+  ✓ New best! Saved.
+
+Epoch 12/15
+Training: 100%
+ 18/18 [00:37<00:00,  2.04s/it, loss=68]
+Validating: 100%
+ 3/3 [00:11<00:00,  3.20s/it]
+Loss: 56.1540 | CV: 0.6585
+  ✓ New best! Saved.
+
+Epoch 13/15
+Training: 100%
+ 18/18 [00:38<00:00,  2.04s/it, loss=35.4]
+Validating: 100%
+ 3/3 [00:10<00:00,  3.18s/it]
+Loss: 54.4608 | CV: 0.6656
+  ✓ New best! Saved.
+
+Epoch 14/15
+Training: 100%
+ 18/18 [00:37<00:00,  2.05s/it, loss=156]
+Validating: 100%
+ 3/3 [00:11<00:00,  3.21s/it]
+Loss: 54.6134 | CV: 0.6662
+  ✓ New best! Saved.
+
+Epoch 15/15
+Training: 100%
+ 18/18 [00:37<00:00,  2.06s/it, loss=87.1]
+Validating: 100%
+ 3/3 [00:10<00:00,  3.19s/it]
+Loss: 53.0596 | CV: 0.6663
+  ✓ New best! Saved.
+
+Fold 2 Best: 0.6663 (epoch 15)
+
+============================================================
+FOLD 3
+============================================================
+Train: 285, Val: 72
+Loading backbone from: /root/.cache/kagglehub/datasets/kbsooo/pretrained-weights-biomass/versions/3/dinov3_large/dinov3_large/dinov3_vitl16_qkvb.pth
+✓ Backbone loaded from local weights
+Backbone feature dim: 1024
+
+Epoch 1/15
+Training: 100%
+ 18/18 [00:37<00:00,  2.01s/it, loss=341]
+Validating: 100%
+ 3/3 [00:11<00:00,  3.25s/it]
+Loss: 565.7128 | CV: -1.7408
+  ✓ New best! Saved.
+
+Epoch 2/15
+Training: 100%
+ 18/18 [00:37<00:00,  1.99s/it, loss=439]
+Validating: 100%
+ 3/3 [00:11<00:00,  3.24s/it]
+Loss: 460.1936 | CV: -0.0097
+  ✓ New best! Saved.
+
+Epoch 3/15
+Training: 100%
+ 18/18 [00:37<00:00,  2.01s/it, loss=340]
+Validating: 100%
+ 3/3 [00:11<00:00,  3.25s/it]
+Loss: 287.9481 | CV: 0.3147
+  ✓ New best! Saved.
+
+Epoch 4/15
+Training: 100%
+ 18/18 [00:37<00:00,  2.03s/it, loss=71.8]
+Validating: 100%
+ 3/3 [00:11<00:00,  3.24s/it]
+Loss: 193.2336 | CV: 0.5418
+  ✓ New best! Saved.
+
+Epoch 5/15
+Training: 100%
+ 18/18 [00:37<00:00,  2.00s/it, loss=89.6]
+Validating: 100%
+ 3/3 [00:11<00:00,  3.25s/it]
+Loss: 146.8439 | CV: 0.4805
+
+Epoch 6/15
+Training: 100%
+ 18/18 [00:37<00:00,  1.99s/it, loss=102]
+Validating: 100%
+ 3/3 [00:10<00:00,  3.21s/it]
+Loss: 110.2241 | CV: 0.5874
+  ✓ New best! Saved.
+
+Epoch 7/15
+Training: 100%
+ 18/18 [00:37<00:00,  2.00s/it, loss=95.3]
+Validating: 100%
+ 3/3 [00:11<00:00,  3.24s/it]
+Loss: 97.9163 | CV: 0.6468
+  ✓ New best! Saved.
+
+Epoch 8/15
+Training: 100%
+ 18/18 [00:37<00:00,  1.99s/it, loss=73.6]
+Validating: 100%
+ 3/3 [00:11<00:00,  3.23s/it]
+Loss: 77.5603 | CV: 0.6284
+
+Epoch 9/15
+Training: 100%
+ 18/18 [00:37<00:00,  1.99s/it, loss=121]
+Validating: 100%
+ 3/3 [00:11<00:00,  3.23s/it]
+Loss: 73.1882 | CV: 0.6317
+
+Epoch 10/15
+Training: 100%
+ 18/18 [00:37<00:00,  1.98s/it, loss=43.2]
+Validating: 100%
+ 3/3 [00:11<00:00,  3.23s/it]
+Loss: 65.4764 | CV: 0.6617
+  ✓ New best! Saved.
+
+Epoch 11/15
+Training: 100%
+ 18/18 [00:37<00:00,  2.00s/it, loss=32.6]
+Validating: 100%
+ 3/3 [00:11<00:00,  3.24s/it]
+Loss: 61.9426 | CV: 0.6751
+  ✓ New best! Saved.
+
+Epoch 12/15
+Training: 100%
+ 18/18 [00:37<00:00,  1.99s/it, loss=34.1]
+Validating: 100%
+ 3/3 [00:11<00:00,  3.25s/it]
+Loss: 55.0512 | CV: 0.6668
+
+Epoch 13/15
+Training: 100%
+ 18/18 [00:37<00:00,  2.00s/it, loss=79.9]
+Validating: 100%
+ 3/3 [00:11<00:00,  3.24s/it]
+Loss: 54.7492 | CV: 0.6492
+
+Epoch 14/15
+Training: 100%
+ 18/18 [00:37<00:00,  2.00s/it, loss=44.8]
+Validating: 100%
+ 3/3 [00:11<00:00,  3.25s/it]
+Loss: 53.5584 | CV: 0.6592
+
+Epoch 15/15
+Training: 100%
+ 18/18 [00:37<00:00,  2.00s/it, loss=82.1]
+Validating: 100%
+ 3/3 [00:11<00:00,  3.23s/it]
+Loss: 52.4777 | CV: 0.6585
+
+Fold 3 Best: 0.6751 (epoch 11)
+
+============================================================
+FOLD 4
+============================================================
+Train: 286, Val: 71
+Loading backbone from: /root/.cache/kagglehub/datasets/kbsooo/pretrained-weights-biomass/versions/3/dinov3_large/dinov3_large/dinov3_vitl16_qkvb.pth
+✓ Backbone loaded from local weights
+Backbone feature dim: 1024
+
+Epoch 1/15
+Training: 100%
+ 18/18 [00:37<00:00,  2.05s/it, loss=448]
+Validating: 100%
+ 3/3 [00:10<00:00,  3.17s/it]
+Loss: 573.4330 | CV: -1.2140
+  ✓ New best! Saved.
+
+Epoch 2/15
+Training: 100%
+ 18/18 [00:37<00:00,  2.05s/it, loss=206]
+Validating: 100%
+ 3/3 [00:10<00:00,  3.18s/it]
+Loss: 450.4756 | CV: -0.0894
+  ✓ New best! Saved.
+
+Epoch 3/15
+Training: 100%
+ 18/18 [00:37<00:00,  2.02s/it, loss=223]
+Validating: 100%
+ 3/3 [00:11<00:00,  3.19s/it]
+Loss: 282.4287 | CV: 0.3225
+  ✓ New best! Saved.
+
+Epoch 4/15
+Training: 100%
+ 18/18 [00:37<00:00,  2.02s/it, loss=112]
+Validating: 100%
+ 3/3 [00:10<00:00,  3.19s/it]
+Loss: 180.6392 | CV: 0.4976
+  ✓ New best! Saved.
+
+Epoch 5/15
+Training: 100%
+ 18/18 [00:38<00:00,  2.08s/it, loss=61.5]
+Validating: 100%
+ 3/3 [00:11<00:00,  3.22s/it]
+Loss: 129.0060 | CV: 0.6046
+  ✓ New best! Saved.
+
+Epoch 6/15
+Training: 100%
+ 18/18 [00:38<00:00,  2.08s/it, loss=123]
+Validating: 100%
+ 3/3 [00:11<00:00,  3.22s/it]
+Loss: 97.9902 | CV: 0.5943
+
+Epoch 7/15
+Training: 100%
+ 18/18 [00:38<00:00,  2.07s/it, loss=83.2]
+Validating: 100%
+ 3/3 [00:11<00:00,  3.21s/it]
+Loss: 79.2542 | CV: 0.5931
+
+Epoch 8/15
+Training: 100%
+ 18/18 [00:38<00:00,  2.08s/it, loss=26.8]
+Validating: 100%
+ 3/3 [00:11<00:00,  3.21s/it]
+Loss: 63.2108 | CV: 0.6429
+  ✓ New best! Saved.
+
+Epoch 9/15
+Training: 100%
+ 18/18 [00:38<00:00,  2.06s/it, loss=27.7]
+Validating: 100%
+ 3/3 [00:11<00:00,  3.22s/it]
+Loss: 59.0744 | CV: 0.6199
+
+Epoch 10/15
+Training: 100%
+ 18/18 [00:38<00:00,  2.06s/it, loss=55.5]
+Validating: 100%
+ 3/3 [00:11<00:00,  3.23s/it]
+Loss: 51.1335 | CV: 0.6441
+  ✓ New best! Saved.
+
+Epoch 11/15
+Training: 100%
+ 18/18 [00:38<00:00,  2.05s/it, loss=21.2]
+Validating: 100%
+ 3/3 [00:11<00:00,  3.21s/it]
+Loss: 44.4609 | CV: 0.6433
+
+Epoch 12/15
+Training: 100%
+ 18/18 [00:38<00:00,  2.08s/it, loss=28.7]
+Validating: 100%
+ 3/3 [00:11<00:00,  3.19s/it]
+Loss: 41.7937 | CV: 0.6470
+  ✓ New best! Saved.
+
+Epoch 13/15
+Training: 100%
+ 18/18 [00:38<00:00,  2.04s/it, loss=31]
+Validating: 100%
+ 3/3 [00:10<00:00,  3.19s/it]
+Loss: 41.0055 | CV: 0.6658
+  ✓ New best! Saved.
+
+Epoch 14/15
+Training: 100%
+ 18/18 [00:38<00:00,  2.04s/it, loss=22.6]
+Validating: 100%
+ 3/3 [00:11<00:00,  3.20s/it]
+Loss: 39.8454 | CV: 0.6600
+
+Epoch 15/15
+Training: 100%
+ 18/18 [00:38<00:00,  2.06s/it, loss=37.7]
+Validating: 100%
+ 3/3 [00:11<00:00,  3.20s/it]
+Loss: 38.8678 | CV: 0.6605
+
+Fold 4 Best: 0.6658 (epoch 13)
+
+============================================================
+TRAINING COMPLETE
+============================================================
+Fold scores: [np.float64(0.6701434892403562), np.float64(0.7068019999027686), np.float64(0.6662820456233548), np.float64(0.6751325672237403), np.float64(0.665789043361111)]
+Mean CV: 0.6768 ± 0.0154
+
+Saved models:
+  model_fold0.pth: 1225.3 MB
+  model_fold1.pth: 1225.3 MB
+  model_fold2.pth: 1225.3 MB
+  model_fold3.pth: 1225.3 MB
+  model_fold4.pth: 1225.3 MB
