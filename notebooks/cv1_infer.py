@@ -54,8 +54,8 @@ class CFG:
     
     model_name = "vit_large_patch16_dinov3_qkvb.lvd1689m"
     
-    # 핵심: 518 해상도 (학습과 동일)
-    img_size = (518, 518)
+    # 핵심: 560 해상도 (학습과 동일, 16의 배수)
+    img_size = (560, 560)
     
     # Model architecture
     hidden_dim = 512

@@ -97,8 +97,8 @@ seed_everything(42)
 
 #%%
 class CFG:
-    # === 핵심 변경 1: 해상도 518 (DINOv2/v3 최적) ===
-    img_size = (518, 518)
+    # === 핵심 변경 1: 해상도 560 (16으로 나눠떨어짐, 512보다 큼) ===
+    img_size = (560, 560)
     
     # Model (v20 베이스)
     hidden_dim = 512
@@ -121,7 +121,7 @@ class CFG:
 cfg = CFG()
 
 print("=== CV1 Configuration ===")
-print(f"Image size: {cfg.img_size} (changed from 512)")
+print(f"Image size: {cfg.img_size} (512→560, 16의 배수)")
 
 #%%
 if IS_KAGGLE:
