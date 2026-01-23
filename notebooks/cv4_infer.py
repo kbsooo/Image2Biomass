@@ -146,17 +146,26 @@ class TestDataset(Dataset):
         return left_img, right_img, row['sample_id_prefix']
 
 
+def compute_vegetation_indices(img_array):
+    """RGB 이미지에서 Vegetation Index 계산"""
+    img = img_array.astype(np.float32) / 255.0
+    r, g, b = img[:,:,0], img[:,:,1], img[:,:,2]
+    
+    exg = 2*g - r - b
+    exg = (exg + 2) / 4
+    
+    gr_ratio = g / (r + 1e-8)
+    gr_ratio = np.clip(gr_ratio, 0, 3) / 3
+    
+    return np.stack([exg, gr_ratio], axis=-1)
+
+
 class TestDatasetV25(Dataset):
-    """v25용 Dataset (Vegetation Index 포함)"""
+    """v25용 Dataset (Vegetation Index 이미지 포함)"""
     def __init__(self, df, cfg, transform=None):
         self.df = df.reset_index(drop=True)
         self.cfg = cfg
         self.transform = transform
-        
-        self.ndvi_mean = df['Pre_GSHH_NDVI'].mean() if 'Pre_GSHH_NDVI' in df.columns else 0.5
-        self.ndvi_std = df['Pre_GSHH_NDVI'].std() if 'Pre_GSHH_NDVI' in df.columns else 0.2
-        self.height_mean = df['Height_Ave_cm'].mean() if 'Height_Ave_cm' in df.columns else 20.0
-        self.height_std = df['Height_Ave_cm'].std() if 'Height_Ave_cm' in df.columns else 10.0
     
     def __len__(self):
         return len(self.df)
@@ -167,27 +176,43 @@ class TestDatasetV25(Dataset):
         width, height = img.size
         mid = width // 2
         
-        left_img = img.crop((0, 0, mid, height))
-        right_img = img.crop((mid, 0, width, height))
+        left_pil = img.crop((0, 0, mid, height))
+        right_pil = img.crop((mid, 0, width, height))
         
+        # Resize & numpy
+        left_pil = left_pil.resize(self.cfg.img_size)
+        right_pil = right_pil.resize(self.cfg.img_size)
+        
+        left_np = np.array(left_pil)
+        right_np = np.array(right_pil)
+        
+        # Vegetation Index
+        left_veg = compute_vegetation_indices(left_np)
+        right_veg = compute_vegetation_indices(right_np)
+        
+        # RGB Transform
         if self.transform:
-            left_img = self.transform(left_img)
-            right_img = self.transform(right_img)
+            left_rgb = self.transform(left_pil)
+            right_rgb = self.transform(right_pil)
         
-        ndvi = row.get('Pre_GSHH_NDVI', self.ndvi_mean)
-        height_val = row.get('Height_Ave_cm', self.height_mean)
+        # Veg to Tensor
+        left_veg = torch.from_numpy(left_veg).permute(2, 0, 1).float()
+        right_veg = torch.from_numpy(right_veg).permute(2, 0, 1).float()
         
-        ndvi_norm = (ndvi - self.ndvi_mean) / (self.ndvi_std + 1e-8)
-        height_norm = (height_val - self.height_mean) / (self.height_std + 1e-8)
-        
-        veg_idx = torch.tensor([ndvi_norm, height_norm], dtype=torch.float32)
-        
-        return left_img, right_img, veg_idx, row['sample_id_prefix']
+        return left_rgb, right_rgb, left_veg, right_veg, row['sample_id_prefix']
 
 
 def get_test_transform(cfg):
     return T.Compose([
         T.Resize(cfg.img_size),
+        T.ToTensor(),
+        T.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+    ])
+
+
+def get_test_transform_v25():
+    """v25용 Transform (Resize 없음 - Dataset에서 이미 resize)"""
+    return T.Compose([
         T.ToTensor(),
         T.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
     ])
@@ -337,8 +362,37 @@ class CSIROModelV22(nn.Module):
         return torch.cat([green, dead, clover, gdm, total], dim=1)
 
 
+class VegetationEncoder(nn.Module):
+    """v25 Vegetation Encoder (Conv2d 기반)"""
+    def __init__(self, in_channels=2, out_dim=128):
+        super().__init__()
+        self.encoder = nn.Sequential(
+            nn.Conv2d(in_channels, 32, 3, padding=1),
+            nn.BatchNorm2d(32),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(2),
+            
+            nn.Conv2d(32, 64, 3, padding=1),
+            nn.BatchNorm2d(64),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(2),
+            
+            nn.Conv2d(64, 128, 3, padding=1),
+            nn.BatchNorm2d(128),
+            nn.ReLU(inplace=True),
+            nn.AdaptiveAvgPool2d(1),
+            
+            nn.Flatten(),
+            nn.Linear(128, out_dim),
+            nn.ReLU(inplace=True)
+        )
+    
+    def forward(self, x):
+        return self.encoder(x)
+
+
 class CSIROModelV25(nn.Module):
-    """v25 모델 (Vegetation Index Late Fusion)"""
+    """v25 모델 (Vegetation Index Late Fusion - Conv2d 기반)"""
     def __init__(self, cfg, backbone_weights_path=None):
         super().__init__()
         
@@ -352,39 +406,36 @@ class CSIROModelV25(nn.Module):
                                                num_classes=0, global_pool='avg')
         
         feat_dim = self.backbone.num_features
-        combined_dim = feat_dim * 2
         
+        self.veg_encoder = VegetationEncoder(in_channels=2, out_dim=cfg.veg_feat_dim)
         self.film = FiLM(feat_dim)
         
-        self.veg_encoder = nn.Sequential(
-            nn.Linear(2, 64),
-            nn.ReLU(inplace=True),
-            nn.Linear(64, cfg.veg_feat_dim)
-        )
+        combined_dim = feat_dim * 2 + cfg.veg_feat_dim * 2
         
-        fusion_dim = combined_dim + cfg.veg_feat_dim
-        
-        self.head_green = make_head(fusion_dim, cfg.hidden_dim, cfg.num_layers,
+        self.head_green = make_head(combined_dim, cfg.hidden_dim, cfg.num_layers,
                                     cfg.dropout, cfg.use_layernorm)
-        self.head_clover = make_head(fusion_dim, cfg.hidden_dim, cfg.num_layers,
+        self.head_clover = make_head(combined_dim, cfg.hidden_dim, cfg.num_layers,
                                      cfg.dropout, cfg.use_layernorm)
-        self.head_dead = make_head(fusion_dim, cfg.hidden_dim, cfg.num_layers,
+        self.head_dead = make_head(combined_dim, cfg.hidden_dim, cfg.num_layers,
                                    cfg.dropout, cfg.use_layernorm)
         
         self.head_height = nn.Sequential(
-            nn.Linear(fusion_dim, 256), nn.ReLU(inplace=True),
+            nn.Linear(combined_dim, 256), nn.ReLU(inplace=True),
             nn.Dropout(0.2), nn.Linear(256, 1)
         )
         self.head_ndvi = nn.Sequential(
-            nn.Linear(fusion_dim, 256), nn.ReLU(inplace=True),
+            nn.Linear(combined_dim, 256), nn.ReLU(inplace=True),
             nn.Dropout(0.2), nn.Linear(256, 1)
         )
         
         self.softplus = nn.Softplus(beta=1.0)
     
-    def forward(self, left_img, right_img, veg_idx):
-        left_feat = self.backbone(left_img)
-        right_feat = self.backbone(right_img)
+    def forward(self, left_rgb, right_rgb, left_veg, right_veg):
+        left_feat = self.backbone(left_rgb)
+        right_feat = self.backbone(right_rgb)
+        
+        left_veg_feat = self.veg_encoder(left_veg)
+        right_veg_feat = self.veg_encoder(right_veg)
         
         context = (left_feat + right_feat) / 2
         gamma, beta = self.film(context)
@@ -392,14 +443,11 @@ class CSIROModelV25(nn.Module):
         left_mod = left_feat * (1 + gamma) + beta
         right_mod = right_feat * (1 + gamma) + beta
         
-        combined = torch.cat([left_mod, right_mod], dim=1)
+        combined = torch.cat([left_mod, right_mod, left_veg_feat, right_veg_feat], dim=1)
         
-        veg_feat = self.veg_encoder(veg_idx)
-        fused = torch.cat([combined, veg_feat], dim=1)
-        
-        green = self.softplus(self.head_green(fused))
-        clover = self.softplus(self.head_clover(fused))
-        dead = self.softplus(self.head_dead(fused))
+        green = self.softplus(self.head_green(combined))
+        clover = self.softplus(self.head_clover(combined))
+        dead = self.softplus(self.head_dead(combined))
         
         gdm = green + clover
         total = gdm + dead
@@ -451,20 +499,21 @@ def predict_base_with_tta(model, loader, device):
 
 @torch.no_grad()
 def predict_v25_with_tta(model, loader, device):
-    """v25 모델 TTA 예측"""
+    """v25 모델 TTA 예측 (4-input)"""
     model.eval()
     all_outputs, all_ids = [], []
     
     tta_transforms = ['original', 'hflip', 'vflip', 'both']
     
-    for left, right, veg_idx, ids in tqdm(loader, desc="v25 TTA Prediction"):
+    for left_rgb, right_rgb, left_veg, right_veg, ids in tqdm(loader, desc="v25 TTA Prediction"):
         batch_preds = []
-        veg_idx = veg_idx.to(device)
         
         for t in tta_transforms:
-            l = apply_tta(left, t).to(device)
-            r = apply_tta(right, t).to(device)
-            pred = model(l, r, veg_idx)
+            l_rgb = apply_tta(left_rgb, t).to(device)
+            r_rgb = apply_tta(right_rgb, t).to(device)
+            l_veg = apply_tta(left_veg, t).to(device)
+            r_veg = apply_tta(right_veg, t).to(device)
+            pred = model(l_rgb, r_rgb, l_veg, r_veg)
             batch_preds.append(pred.cpu())
         
         mean_pred = torch.stack(batch_preds).mean(0)
@@ -491,14 +540,16 @@ def predict_base_no_tta(model, loader, device):
 
 @torch.no_grad()
 def predict_v25_no_tta(model, loader, device):
-    """v25 모델 TTA 없이 예측"""
+    """v25 모델 TTA 없이 예측 (4-input)"""
     model.eval()
     all_outputs, all_ids = [], []
     
-    for left, right, veg_idx, ids in tqdm(loader, desc="v25 Prediction"):
-        left, right = left.to(device), right.to(device)
-        veg_idx = veg_idx.to(device)
-        pred = model(left, right, veg_idx)
+    for left_rgb, right_rgb, left_veg, right_veg, ids in tqdm(loader, desc="v25 Prediction"):
+        left_rgb = left_rgb.to(device)
+        right_rgb = right_rgb.to(device)
+        left_veg = left_veg.to(device)
+        right_veg = right_veg.to(device)
+        pred = model(left_rgb, right_rgb, left_veg, right_veg)
         all_outputs.append(pred.cpu().numpy())
         all_ids.extend(ids)
     
@@ -523,7 +574,8 @@ def predict_version(version, model_dir, test_df, cfg, device, use_tta=True):
     transform = get_test_transform(cfg)
     
     if version == 'v25':
-        dataset = TestDatasetV25(test_df, cfg, transform)
+        transform_v25 = get_test_transform_v25()
+        dataset = TestDatasetV25(test_df, cfg, transform_v25)
         loader = DataLoader(dataset, batch_size=cfg.batch_size, shuffle=False,
                            num_workers=cfg.num_workers, pin_memory=True)
         
