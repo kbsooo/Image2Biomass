@@ -354,15 +354,18 @@ class DINOv3Backbone(nn.Module):
 
 
 class ZeroInflatedHead(nn.Module):
-    """Two-stage head for zero-inflated targets (Clover)"""
+    """Two-stage head for zero-inflated targets (Clover)
+    
+    Note: classifier outputs logits (no sigmoid) for AMP compatibility
+    """
     def __init__(self, in_dim, hidden_dim=128, dropout=0.2):
         super().__init__()
+        # Classifier outputs logits (no sigmoid for AMP compatibility)
         self.classifier = nn.Sequential(
             nn.Linear(in_dim, hidden_dim),
             nn.ReLU(inplace=True),
             nn.Dropout(dropout),
             nn.Linear(hidden_dim, 1),
-            nn.Sigmoid(),
         )
         self.regressor = nn.Sequential(
             nn.Linear(in_dim, hidden_dim),
@@ -373,10 +376,11 @@ class ZeroInflatedHead(nn.Module):
         )
     
     def forward(self, x):
-        p_pos = self.classifier(x)
+        logits = self.classifier(x)
+        p_pos = torch.sigmoid(logits)  # Convert to probability for prediction
         amount = self.regressor(x)
         pred = p_pos * amount
-        return p_pos, amount, pred
+        return logits, amount, pred  # Return logits for loss, not p_pos
 
 
 class MLPHead(nn.Module):
@@ -439,13 +443,16 @@ class CV6Model(nn.Module):
 
 #%%
 class ZeroInflatedLoss(nn.Module):
+    """Zero-inflated loss using BCEWithLogits for AMP compatibility"""
     def __init__(self, cls_weight=0.5):
         super().__init__()
         self.cls_weight = cls_weight
     
-    def forward(self, p_positive, amount, targets):
+    def forward(self, logits, amount, targets):
+        # logits: classifier output (before sigmoid)
         is_pos = (targets > 0).float()
-        cls_loss = F.binary_cross_entropy(p_positive, is_pos)
+        # Use binary_cross_entropy_with_logits for AMP compatibility
+        cls_loss = F.binary_cross_entropy_with_logits(logits, is_pos)
         
         pos_mask = targets > 0
         if pos_mask.sum() > 0:
